@@ -1,6 +1,7 @@
-# GPI backend — Laravel 13 / PHP 8.3 for Railway.
-# Predictable build with the Postgres + mbstring extensions Laravel needs.
-FROM php:8.3-cli
+# GPI backend — Laravel 13 / PHP 8.4 for Railway.
+# 8.4 required: the composer.lock (generated on PHP 8.5) pulls Symfony 8.1,
+# which needs php >= 8.4.1. Predictable build with the Postgres + mbstring exts.
+FROM php:8.4-cli
 
 # System libs + PHP extensions (pdo_pgsql for Supabase, mbstring/xml for Laravel).
 RUN apt-get update \
