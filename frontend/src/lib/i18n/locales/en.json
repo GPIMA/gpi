@@ -1,0 +1,274 @@
+{
+  "app": {
+    "name": "GPI",
+    "full": "IT Fleet Management",
+    "tagline": "Intelligent IT fleet management system"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "equipements": "Equipment fleet",
+    "supervision": "Monitoring",
+    "alertes": "Alerts",
+    "regles": "Alert rules",
+    "incidents": "Incidents",
+    "predictions": "Predictions",
+    "chatbot": "Assistant",
+    "administration": "Administration",
+    "sections": {
+      "exploitation": "Operations",
+      "intelligence": "Intelligence",
+      "systeme": "System"
+    }
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "Access the monitoring console",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "error": "Sign-in failed. Check your credentials.",
+    "logout": "Sign out"
+  },
+  "common": {
+    "loading": "Loading…",
+    "search": "Search",
+    "language": "Language",
+    "online": "Online",
+    "lastUpdate": "Updated",
+    "noData": "No data yet",
+    "comingSoon": "Module in progress"
+  },
+  "incidents": {
+    "title": "Incidents",
+    "subtitle": "Fault reporting and resolution",
+    "report": "Report an incident",
+    "filterStatut": "Status",
+    "filterPriorite": "Priority",
+    "allStatuts": "All statuses",
+    "allPriorites": "All priorities",
+    "empty": "No incidents.",
+    "take": "Take ownership",
+    "resolve": "Resolve",
+    "cols": {
+      "titre": "Title",
+      "equipement": "Device",
+      "priorite": "Priority",
+      "statut": "Status",
+      "signalePar": "Reported by",
+      "traitePar": "Handled by",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "form": {
+      "title": "Report an incident",
+      "titre": "Title",
+      "description": "Description",
+      "equipement": "Affected device",
+      "priorite": "Priority",
+      "submit": "Report",
+      "submitting": "Sending…",
+      "cancel": "Cancel"
+    },
+    "resolveForm": {
+      "title": "Resolve incident",
+      "solution": "Solution applied",
+      "submit": "Mark as resolved",
+      "submitting": "Resolving…",
+      "cancel": "Cancel"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications.",
+    "markRead": "Mark all as read"
+  },
+  "administration": {
+    "title": "Administration",
+    "subtitle": "User management",
+    "add": "New user",
+    "allRoles": "All roles",
+    "searchPlaceholder": "Search (name, email…)",
+    "empty": "No users.",
+    "cols": {
+      "nom": "Name",
+      "email": "Email",
+      "role": "Role",
+      "detail": "Specialty / Department",
+      "actions": "Actions"
+    },
+    "form": {
+      "createTitle": "New user",
+      "editTitle": "Edit user",
+      "nom": "Last name",
+      "prenom": "First name",
+      "email": "Email address",
+      "password": "Password",
+      "passwordEdit": "Password (leave blank to keep)",
+      "role": "Role",
+      "telephone": "Phone",
+      "specialite": "Specialty",
+      "departement": "Department",
+      "save": "Save",
+      "saving": "Saving…",
+      "cancel": "Cancel"
+    },
+    "delete": {
+      "title": "Delete user",
+      "message": "Delete “{{nom}}”? This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    }
+  },
+  "assistant": {
+    "title": "Assistant",
+    "subtitle": "Self-service IT help",
+    "new": "New conversation",
+    "noConversations": "No conversations",
+    "placeholder": "Ask your question…",
+    "send": "Send",
+    "thinking": "The assistant is typing…",
+    "welcome": "Hi! Describe your IT problem and I'll help as best I can.",
+    "examples": "Examples: forgotten password · printer down · slow network"
+  },
+  "predictions": {
+    "title": "Predictions",
+    "subtitle": "AI anticipation of future incidents",
+    "generate": "Generate predictions",
+    "generating": "Analyzing…",
+    "model": "Model",
+    "precision": "Accuracy",
+    "version": "Version",
+    "empty": "No predictions. Run an analysis.",
+    "risk": "Risk",
+    "horizon": "Horizon",
+    "days": "{{count}} d",
+    "probability": "Probability"
+  },
+  "dashboard": {
+    "title": "Overview",
+    "subtitle": "Live fleet status",
+    "fleet": "Total fleet",
+    "devices": "devices",
+    "activeAlerts": "Active alerts",
+    "viewAlerts": "View alerts",
+    "byState": "By status",
+    "recentAlerts": "Recent alerts",
+    "activity": "Activity feed",
+    "availability": "Availability",
+    "all": "All",
+    "noAlerts": "No active alerts. All nominal."
+  },
+  "supervision": {
+    "title": "Monitoring",
+    "subtitle": "Live equipment resources",
+    "selectHint": "Select a device to view its history.",
+    "noOnline": "No online equipment to monitor.",
+    "history": "History (CPU · RAM · Disk)",
+    "offline": "Offline"
+  },
+  "alertes": {
+    "title": "Alerts",
+    "subtitle": "Monitoring events",
+    "filterEtat": "Status",
+    "filterSeverite": "Severity",
+    "allEtats": "All states",
+    "allSeverites": "All severities",
+    "empty": "No alerts.",
+    "take": "Take ownership",
+    "resolve": "Resolve",
+    "cols": {
+      "severite": "Severity",
+      "type": "Type",
+      "message": "Message",
+      "equipement": "Device",
+      "etat": "Status",
+      "date": "Created",
+      "actions": "Actions"
+    }
+  },
+  "regles": {
+    "title": "Alert rules",
+    "subtitle": "Alert trigger thresholds",
+    "add": "New rule",
+    "empty": "No rules defined.",
+    "active": "Active",
+    "inactive": "Inactive",
+    "cols": {
+      "nom": "Name",
+      "condition": "Condition",
+      "severite": "Severity",
+      "type": "Alert type",
+      "etat": "Status",
+      "actions": "Actions"
+    },
+    "targets": { "cpu": "CPU", "ram": "RAM", "disque": "Disk" },
+    "form": {
+      "createTitle": "New rule",
+      "editTitle": "Edit rule",
+      "nom": "Name",
+      "cible": "Target metric",
+      "operateur": "Operator",
+      "seuil": "Threshold (%)",
+      "severite": "Severity",
+      "typeAlerte": "Raised alert type",
+      "actif": "Rule active",
+      "save": "Save",
+      "saving": "Saving…",
+      "cancel": "Cancel"
+    },
+    "delete": {
+      "title": "Delete rule",
+      "message": "Delete rule “{{nom}}”?",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    }
+  },
+  "equipements": {
+    "title": "Equipment fleet",
+    "subtitle": "IT asset inventory",
+    "count": "{{count}} device",
+    "count_other": "{{count}} devices",
+    "add": "Add",
+    "scan": "Scan network",
+    "scanning": "Scanning…",
+    "scanDone": "{{count}} device(s) detected",
+    "filterType": "Type",
+    "filterEtat": "Status",
+    "allTypes": "All types",
+    "allEtats": "All states",
+    "searchPlaceholder": "Search (name, IP, brand…)",
+    "empty": "No equipment yet. Add one or run a network scan.",
+    "cols": {
+      "nom": "Name",
+      "type": "Type",
+      "etat": "Status",
+      "ip": "IP address",
+      "localisation": "Location",
+      "affecte": "Assigned to",
+      "actions": "Actions"
+    },
+    "form": {
+      "createTitle": "New equipment",
+      "editTitle": "Edit equipment",
+      "nom": "Name",
+      "type": "Type",
+      "marque": "Brand",
+      "modele": "Model",
+      "ip": "IP address",
+      "mac": "MAC address",
+      "etat": "Status",
+      "localisation": "Location",
+      "dateAcquisition": "Acquisition date",
+      "save": "Save",
+      "saving": "Saving…",
+      "cancel": "Cancel"
+    },
+    "delete": {
+      "title": "Delete equipment",
+      "message": "Delete “{{nom}}”? This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    }
+  }
+}

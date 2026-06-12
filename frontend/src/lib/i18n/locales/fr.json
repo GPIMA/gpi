@@ -1,0 +1,274 @@
+{
+  "app": {
+    "name": "GPI",
+    "full": "Gestion de Parc Informatique",
+    "tagline": "Système intelligent de gestion de parc informatique"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "equipements": "Parc d'équipements",
+    "supervision": "Supervision",
+    "alertes": "Alertes",
+    "regles": "Règles d'alerte",
+    "incidents": "Incidents",
+    "predictions": "Prédictions",
+    "chatbot": "Assistant",
+    "administration": "Administration",
+    "sections": {
+      "exploitation": "Exploitation",
+      "intelligence": "Intelligence",
+      "systeme": "Système"
+    }
+  },
+  "auth": {
+    "title": "Connexion",
+    "subtitle": "Accédez à la console de supervision",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "submitting": "Connexion…",
+    "error": "Connexion impossible. Vérifiez vos identifiants.",
+    "logout": "Se déconnecter"
+  },
+  "common": {
+    "loading": "Chargement…",
+    "search": "Rechercher",
+    "language": "Langue",
+    "online": "En ligne",
+    "lastUpdate": "Mise à jour",
+    "noData": "Aucune donnée pour le moment",
+    "comingSoon": "Module en préparation"
+  },
+  "incidents": {
+    "title": "Incidents",
+    "subtitle": "Signalement et résolution des pannes",
+    "report": "Signaler un incident",
+    "filterStatut": "Statut",
+    "filterPriorite": "Priorité",
+    "allStatuts": "Tous les statuts",
+    "allPriorites": "Toutes les priorités",
+    "empty": "Aucun incident.",
+    "take": "Prendre en charge",
+    "resolve": "Résoudre",
+    "cols": {
+      "titre": "Titre",
+      "equipement": "Équipement",
+      "priorite": "Priorité",
+      "statut": "Statut",
+      "signalePar": "Signalé par",
+      "traitePar": "Traité par",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "form": {
+      "title": "Signaler un incident",
+      "titre": "Titre",
+      "description": "Description",
+      "equipement": "Équipement concerné",
+      "priorite": "Priorité",
+      "submit": "Signaler",
+      "submitting": "Envoi…",
+      "cancel": "Annuler"
+    },
+    "resolveForm": {
+      "title": "Résoudre l'incident",
+      "solution": "Solution apportée",
+      "submit": "Marquer comme résolu",
+      "submitting": "Résolution…",
+      "cancel": "Annuler"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "Aucune notification.",
+    "markRead": "Tout marquer comme lu"
+  },
+  "administration": {
+    "title": "Administration",
+    "subtitle": "Gestion des utilisateurs",
+    "add": "Nouvel utilisateur",
+    "allRoles": "Tous les rôles",
+    "searchPlaceholder": "Rechercher (nom, e-mail…)",
+    "empty": "Aucun utilisateur.",
+    "cols": {
+      "nom": "Nom",
+      "email": "E-mail",
+      "role": "Rôle",
+      "detail": "Spécialité / Département",
+      "actions": "Actions"
+    },
+    "form": {
+      "createTitle": "Nouvel utilisateur",
+      "editTitle": "Modifier l'utilisateur",
+      "nom": "Nom",
+      "prenom": "Prénom",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "passwordEdit": "Mot de passe (laisser vide pour conserver)",
+      "role": "Rôle",
+      "telephone": "Téléphone",
+      "specialite": "Spécialité",
+      "departement": "Département",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…",
+      "cancel": "Annuler"
+    },
+    "delete": {
+      "title": "Supprimer l'utilisateur",
+      "message": "Supprimer « {{nom}} » ? Cette action est irréversible.",
+      "confirm": "Supprimer",
+      "cancel": "Annuler"
+    }
+  },
+  "assistant": {
+    "title": "Assistant",
+    "subtitle": "Aide informatique en libre-service",
+    "new": "Nouvelle conversation",
+    "noConversations": "Aucune conversation",
+    "placeholder": "Posez votre question…",
+    "send": "Envoyer",
+    "thinking": "L'assistant rédige…",
+    "welcome": "Bonjour ! Décrivez votre problème informatique et je vous aiderai au mieux.",
+    "examples": "Exemples : mot de passe oublié · imprimante en panne · réseau lent"
+  },
+  "predictions": {
+    "title": "Prédictions",
+    "subtitle": "Anticipation des futurs incidents par l'IA",
+    "generate": "Générer les prédictions",
+    "generating": "Analyse en cours…",
+    "model": "Modèle",
+    "precision": "Précision",
+    "version": "Version",
+    "empty": "Aucune prédiction. Lancez une analyse.",
+    "risk": "Risque",
+    "horizon": "Horizon",
+    "days": "{{count}} j",
+    "probability": "Probabilité"
+  },
+  "dashboard": {
+    "title": "Vue d'ensemble",
+    "subtitle": "État du parc en temps réel",
+    "fleet": "Parc total",
+    "devices": "équipements",
+    "activeAlerts": "Alertes actives",
+    "viewAlerts": "Voir les alertes",
+    "byState": "Répartition par état",
+    "recentAlerts": "Alertes récentes",
+    "activity": "Flux d'activité",
+    "availability": "Disponibilité",
+    "all": "Toutes",
+    "noAlerts": "Aucune alerte active. Tout est nominal."
+  },
+  "supervision": {
+    "title": "Supervision",
+    "subtitle": "Ressources des équipements en temps réel",
+    "selectHint": "Sélectionnez un équipement pour afficher son historique.",
+    "noOnline": "Aucun équipement en ligne à superviser.",
+    "history": "Historique (CPU · RAM · Disque)",
+    "offline": "Hors ligne"
+  },
+  "alertes": {
+    "title": "Alertes",
+    "subtitle": "Événements de supervision",
+    "filterEtat": "État",
+    "filterSeverite": "Sévérité",
+    "allEtats": "Tous les états",
+    "allSeverites": "Toutes les sévérités",
+    "empty": "Aucune alerte.",
+    "take": "Prendre en charge",
+    "resolve": "Résoudre",
+    "cols": {
+      "severite": "Sévérité",
+      "type": "Type",
+      "message": "Message",
+      "equipement": "Équipement",
+      "etat": "État",
+      "date": "Créée le",
+      "actions": "Actions"
+    }
+  },
+  "regles": {
+    "title": "Règles d'alerte",
+    "subtitle": "Seuils de déclenchement des alertes",
+    "add": "Nouvelle règle",
+    "empty": "Aucune règle définie.",
+    "active": "Active",
+    "inactive": "Inactive",
+    "cols": {
+      "nom": "Nom",
+      "condition": "Condition",
+      "severite": "Sévérité",
+      "type": "Type d'alerte",
+      "etat": "État",
+      "actions": "Actions"
+    },
+    "targets": { "cpu": "CPU", "ram": "RAM", "disque": "Disque" },
+    "form": {
+      "createTitle": "Nouvelle règle",
+      "editTitle": "Modifier la règle",
+      "nom": "Nom",
+      "cible": "Métrique cible",
+      "operateur": "Opérateur",
+      "seuil": "Seuil (%)",
+      "severite": "Sévérité",
+      "typeAlerte": "Type d'alerte levé",
+      "actif": "Règle active",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…",
+      "cancel": "Annuler"
+    },
+    "delete": {
+      "title": "Supprimer la règle",
+      "message": "Supprimer la règle « {{nom}} » ?",
+      "confirm": "Supprimer",
+      "cancel": "Annuler"
+    }
+  },
+  "equipements": {
+    "title": "Parc d'équipements",
+    "subtitle": "Inventaire des actifs informatiques",
+    "count": "{{count}} équipement",
+    "count_other": "{{count}} équipements",
+    "add": "Ajouter",
+    "scan": "Scanner le réseau",
+    "scanning": "Scan en cours…",
+    "scanDone": "{{count}} équipement(s) détecté(s)",
+    "filterType": "Type",
+    "filterEtat": "État",
+    "allTypes": "Tous les types",
+    "allEtats": "Tous les états",
+    "searchPlaceholder": "Rechercher (nom, IP, marque…)",
+    "empty": "Aucun équipement. Ajoutez-en un ou lancez un scan réseau.",
+    "cols": {
+      "nom": "Nom",
+      "type": "Type",
+      "etat": "État",
+      "ip": "Adresse IP",
+      "localisation": "Localisation",
+      "affecte": "Affecté à",
+      "actions": "Actions"
+    },
+    "form": {
+      "createTitle": "Nouvel équipement",
+      "editTitle": "Modifier l'équipement",
+      "nom": "Nom",
+      "type": "Type",
+      "marque": "Marque",
+      "modele": "Modèle",
+      "ip": "Adresse IP",
+      "mac": "Adresse MAC",
+      "etat": "État",
+      "localisation": "Localisation",
+      "dateAcquisition": "Date d'acquisition",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…",
+      "cancel": "Annuler"
+    },
+    "delete": {
+      "title": "Supprimer l'équipement",
+      "message": "Confirmer la suppression de « {{nom}} » ? Cette action est irréversible.",
+      "confirm": "Supprimer",
+      "cancel": "Annuler"
+    }
+  }
+}
