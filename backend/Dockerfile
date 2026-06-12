@@ -1,0 +1,24 @@
+# GPI backend — Laravel 13 / PHP 8.3 for Railway.
+# Predictable build with the Postgres + mbstring extensions Laravel needs.
+FROM php:8.3-cli
+
+# System libs + PHP extensions (pdo_pgsql for Supabase, mbstring/xml for Laravel).
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        git unzip libpq-dev libonig-dev libxml2-dev \
+    && docker-php-ext-install pdo pdo_pgsql mbstring xml \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app
+COPY . .
+
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress \
+    && mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+# Railway injects $PORT at runtime. Migrate (idempotent) then serve.
+CMD php artisan config:clear \
+    && php artisan migrate --force \
+    && php artisan serve --host 0.0.0.0 --port "${PORT:-8080}"
