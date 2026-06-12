@@ -32,6 +32,12 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
+        // Demo data is seeded once. On redeploys the admin above is kept in sync
+        // and we stop here, so running this seeder on every boot stays idempotent.
+        if (Equipement::query()->exists()) {
+            return;
+        }
+
         // A small demo team so the interface has data to work with.
         User::factory()->technicien()->count(3)->create();
         $employes = User::factory()->employe()->count(8)->create();

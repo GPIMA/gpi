@@ -18,7 +18,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progre
     && mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Railway injects $PORT at runtime. Migrate (idempotent) then serve.
+# Railway injects $PORT at runtime. Migrate + seed are both idempotent
+# (the seeder no-ops demo data once it exists), then serve.
 CMD php artisan config:clear \
     && php artisan migrate --force \
+    && php artisan db:seed --force \
     && php artisan serve --host 0.0.0.0 --port "${PORT:-8080}"
