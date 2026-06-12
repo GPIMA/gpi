@@ -11,11 +11,14 @@ RUN apt-get update \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 WORKDIR /app
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress \
+# Dev deps are kept: the database seeder relies on Faker (fake()) for the demo
+# fleet/users, which lives in require-dev.
+RUN composer install --optimize-autoloader --no-interaction --no-progress \
     && mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
@@ -23,5 +26,5 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progre
 # (the seeder no-ops demo data once it exists), then serve.
 CMD php artisan config:clear \
     && php artisan migrate --force \
-    && php artisan db:seed --force \
+    && (php artisan db:seed --force || true) \
     && php artisan serve --host 0.0.0.0 --port "${PORT:-8080}"
