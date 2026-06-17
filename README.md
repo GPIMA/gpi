@@ -8,7 +8,6 @@ GPI est une application web complète pour gérer, superviser et organiser un pa
 GPIMA/gpi
 ├── backend/                  # API Laravel, auth, database, seeders, services métier
 ├── frontend/                 # Application React/Vite + vitrine publique
-├── docs/                     # Documentation technique et déploiement
 ├── render.yaml               # Déploiement backend + database sur Render
 └── README.md                 # Vue générale du projet
 ```
@@ -21,7 +20,6 @@ GPIMA/gpi
 | Frontend | `frontend/` | Interface React : login, dashboard, modules |
 | Backend | `backend/` | API Laravel sécurisée avec Sanctum |
 | Database | `backend/database/` | Migrations, factories et seeders |
-| Docs | `docs/` | Déploiement, architecture et organisation |
 
 ## Liens principaux
 
@@ -87,12 +85,6 @@ Mot de passe: Gpi@2026
 - Prédictions IA simulées.
 - Assistant chatbot.
 - Vitrine publique professionnelle.
-
-## Documentation
-
-- Organisation du dépôt : [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md)
-- Backend et base de données : [`docs/BACKEND.md`](docs/BACKEND.md)
-- Déploiement et liaison frontend/backend : [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md)
 
 ## Déploiement
 
