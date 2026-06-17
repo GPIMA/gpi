@@ -1,62 +1,49 @@
 @import 'tailwindcss';
 
 /* ============================================================================
-   GPI — Gestion de Parc Informatique · Design system
-   Utilitarian NOC console: cool steel surfaces, square structure, one restrained
-   cyan accent, conventional operational signal colours. Built to read like real
-   operations tooling — dense, legible, tabular — not a marketing dashboard.
-   Tokens feed Tailwind (bg-surface, text-muted…) and the component classes below.
+   GPI — Gestion de Parc Informatique · Unified light design system
+   Shared visual direction with the public vitrine: clear blue/white interface,
+   rounded professional cards, readable operational data, and consistent actions.
 ============================================================================ */
 
 @theme {
-  /* Surfaces — cool steel, flat. Elevation comes from line weight, not glow. */
-  --color-base: #0b0e12;
-  --color-surface: #11151b;
-  --color-raised: #161b22;
-  --color-overlay: #1d232c;
+  --color-base: #f3fbff;
+  --color-surface: #ffffff;
+  --color-raised: #f8fdff;
+  --color-overlay: #dff2fb;
 
-  /* Structure — the panel is held together by rules, so lines do real work */
-  --color-line: #1f2630;
-  --color-line-strong: #2d3742;
+  --color-line: #d8e5ee;
+  --color-line-strong: #b7cfdd;
 
-  /* Text */
-  --color-ink: #dbe1e8;
-  --color-muted: #8a94a1;
-  --color-faint: #5a6470;
+  --color-ink: #08111c;
+  --color-muted: #526273;
+  --color-faint: #7890a4;
 
-  /* Accent — instrument cyan. One colour, used sparingly for focus & primary. */
-  --color-brand: #4cc2d6;
-  --color-brand-strong: #6ad4e6;
-  --color-brand-dim: #2a6470;
-  --color-brand-wash: rgba(76, 194, 214, 0.10);
-  --color-on-brand: #04161a;
+  --color-brand: #073b67;
+  --color-brand-strong: #0b4b7c;
+  --color-brand-dim: #65aedc;
+  --color-brand-wash: rgba(101, 174, 220, 0.16);
+  --color-on-brand: #ffffff;
 
-  /* Signal palette — conventional ops status (green/amber/red), desaturated */
-  --color-online: #3fb27f;
-  --color-warn: #d29922;
-  --color-down: #e35347;
-  --color-info: #4d9af0;
-  --color-idle: #59636f;
+  --color-online: #2f9f73;
+  --color-warn: #c98511;
+  --color-down: #d84b3f;
+  --color-info: #2f80c9;
+  --color-idle: #94a3b8;
 
-  /* Type — neutral grotesk + mono. No display face. */
   --font-sans: 'Satoshi', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: var(--font-sans);
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
 
-  /* Radii — near-square. This is hardware, not a card. */
-  --radius-xs: 2px;
-  --radius-sm: 2px;
-  --radius-md: 3px;
+  --radius-xs: 10px;
+  --radius-sm: 14px;
+  --radius-md: 20px;
 }
 
 @layer base {
-  * {
-    border-color: var(--color-line);
-  }
+  * { border-color: var(--color-line); }
 
-  html {
-    color-scheme: dark;
-  }
+  html { color-scheme: light; }
 
   body {
     margin: 0;
@@ -69,24 +56,22 @@
     text-rendering: optimizeLegibility;
   }
 
-  ::selection {
-    background: var(--color-brand-dim);
-    color: #fff;
-  }
+  ::selection { background: var(--color-brand-dim); color: #fff; }
 
-  /* Thin, mechanical scrollbars */
-  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
     background: var(--color-line-strong);
-    border: 2px solid var(--color-base);
+    border: 3px solid var(--color-base);
+    border-radius: 999px;
   }
-  ::-webkit-scrollbar-thumb:hover { background: #3a4552; }
+  ::-webkit-scrollbar-thumb:hover { background: #8fb2c8; }
 
   h1, h2, h3 {
     font-family: var(--font-sans);
-    font-weight: 600;
-    letter-spacing: -0.005em;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--color-ink);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -98,27 +83,28 @@
 }
 
 @layer components {
-  /* — Eyebrow / section kicker (sidebar use only) ——————————— */
   .eyebrow {
     font-family: var(--font-mono);
     font-size: 10.5px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-faint);
+    color: var(--color-brand);
+    font-weight: 700;
   }
 
-  /* — Panel: the base content container ———————————————— */
   .panel {
-    background: var(--color-surface);
+    background: rgba(255, 255, 255, 0.94);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-md);
+    box-shadow: 0 18px 48px rgba(7, 59, 103, 0.10);
+    overflow: hidden;
   }
   .panel-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.7rem 1rem;
+    padding: 0.85rem 1rem;
     border-bottom: 1px solid var(--color-line);
     background: var(--color-raised);
   }
@@ -128,10 +114,9 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-muted);
-    font-weight: 500;
+    font-weight: 700;
   }
 
-  /* — Status: square swatch + uppercase mono label, no rounded pill ——— */
   .status {
     display: inline-flex;
     align-items: center;
@@ -142,156 +127,167 @@
     text-transform: uppercase;
     white-space: nowrap;
     color: var(--color-ink);
+    font-weight: 600;
   }
   .status::before {
     content: '';
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     flex: none;
+    border-radius: 999px;
     background: var(--status-color, var(--color-idle));
   }
 
-  /* Steady status dot (kept for the header live indicator) */
   .dot {
-    width: 7px; height: 7px;
-    display: inline-block; flex: none;
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    flex: none;
+    border-radius: 999px;
   }
 
-  /* — Tag: neutral square chip for non-status metadata ———————— */
   .pill {
-    display: inline-flex; align-items: center; gap: 0.4rem;
-    padding: 0.12rem 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 11px; letter-spacing: 0.02em;
-    border-radius: var(--radius-xs);
-    border: 1px solid var(--color-line-strong);
-    color: var(--color-muted);
-    white-space: nowrap;
-  }
-
-  /* — Buttons: flat, bordered, mechanical. No gradients, no fill-by-default. */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
-    padding: 0.42rem 0.8rem;
-    font-size: 0.82rem; font-weight: 500;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--color-line-strong);
-    color: var(--color-ink);
-    background: transparent;
-    cursor: pointer;
-    transition: border-color 0.12s, background 0.12s, color 0.12s;
-  }
-  .btn:hover { border-color: var(--color-line-strong); background: var(--color-raised); }
-  .btn:active { background: var(--color-overlay); }
-  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-  .btn:focus-visible {
-    outline: 1px solid var(--color-brand);
-    outline-offset: 1px;
-  }
-  /* Primary: accent outline, fills on hover. Reads as the armed action. */
-  .btn-primary {
-    border-color: var(--color-brand-dim);
-    color: var(--color-brand-strong);
-    background: var(--color-brand-wash);
-  }
-  .btn-primary:hover {
-    background: var(--color-brand);
-    border-color: var(--color-brand);
-    color: var(--color-on-brand);
-  }
-  .btn-primary:active { background: var(--color-brand-strong); }
-  /* Danger: same logic for destructive ops */
-  .btn-danger {
-    border-color: #5a2a28;
-    color: #f1837a;
-    background: rgba(227, 83, 71, 0.08);
-  }
-  .btn-danger:hover {
-    background: var(--color-down);
-    border-color: var(--color-down);
-    color: #1a0605;
-  }
-  .btn-ghost { background: transparent; border-color: transparent; color: var(--color-muted); }
-  .btn-ghost:hover { background: var(--color-raised); color: var(--color-ink); border-color: transparent; }
-
-  /* — Inputs ————————————————————————————————————————— */
-  .field-label {
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.22rem 0.62rem;
     font-family: var(--font-mono);
     font-size: 11px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--color-faint);
-    margin-bottom: 0.35rem;
+    letter-spacing: 0.02em;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background: var(--color-raised);
+    color: var(--color-muted);
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.58rem 0.9rem;
+    font-size: 0.84rem;
+    font-weight: 800;
+    border-radius: 999px;
+    border: 1px solid var(--color-line-strong);
+    color: var(--color-ink);
+    background: #fff;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(7, 59, 103, 0.07);
+    transition: transform 0.14s, border-color 0.14s, background 0.14s, color 0.14s, box-shadow 0.14s;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+    border-color: var(--color-brand-dim);
+    background: var(--color-overlay);
+    box-shadow: 0 12px 24px rgba(7, 59, 103, 0.12);
+  }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+  .btn:focus-visible { outline: 3px solid rgba(101, 174, 220, 0.28); outline-offset: 2px; }
+
+  .btn-primary {
+    border-color: var(--color-brand);
+    color: var(--color-on-brand);
+    background: var(--color-brand);
+    box-shadow: 0 12px 28px rgba(7, 59, 103, 0.22);
+  }
+  .btn-primary:hover {
+    background: var(--color-brand-strong);
+    border-color: var(--color-brand-strong);
+    color: var(--color-on-brand);
+  }
+
+  .btn-danger {
+    border-color: rgba(216, 75, 63, 0.24);
+    color: #a9352c;
+    background: rgba(216, 75, 63, 0.08);
+  }
+  .btn-danger:hover { background: #fff1ef; color: #8f2a23; }
+
+  .btn-ghost { background: transparent; border-color: transparent; color: var(--color-muted); box-shadow: none; }
+  .btn-ghost:hover { background: var(--color-overlay); color: var(--color-brand); border-color: transparent; box-shadow: none; }
+
+  .field-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: var(--color-brand);
+    margin-bottom: 0.4rem;
+    font-weight: 900;
   }
   .input {
     width: 100%;
-    padding: 0.5rem 0.65rem;
-    background: var(--color-base);
-    border: 1px solid var(--color-line-strong);
+    padding: 0.72rem 0.85rem;
+    background: #fbfdff;
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-sm);
     color: var(--color-ink);
-    font-size: 0.86rem;
+    font-size: 0.9rem;
     font-family: var(--font-sans);
-    transition: border-color 0.12s, box-shadow 0.12s;
+    transition: border-color 0.14s, box-shadow 0.14s, background 0.14s;
   }
   .input::placeholder { color: var(--color-faint); }
   .input:focus {
     outline: none;
-    border-color: var(--color-brand);
-    box-shadow: inset 0 0 0 1px var(--color-brand-dim);
+    border-color: var(--color-brand-dim);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(101, 174, 220, 0.18);
   }
 
-  /* — Instrument canvas: dot-grid + faint blueprint rules so content sits on a
-       surface, not a void. Visible, but kept under the content with low alpha. */
   .app-canvas {
     background-color: var(--color-base);
     background-image:
-      radial-gradient(rgba(124, 198, 214, 0.10) 1.1px, transparent 1.3px),
-      linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
-    background-size: 24px 24px, 96px 96px, 96px 96px;
-    background-position: -1px -1px, -1px -1px, -1px -1px;
+      radial-gradient(rgba(7, 59, 103, 0.08) 1px, transparent 1.2px),
+      linear-gradient(rgba(7, 59, 103, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(7, 59, 103, 0.045) 1px, transparent 1px),
+      linear-gradient(135deg, rgba(101, 174, 220, 0.14), transparent 42%);
+    background-size: 24px 24px, 96px 96px, 96px 96px, auto;
+    background-position: -1px -1px, -1px -1px, -1px -1px, center;
   }
 
-  /* — KPI strip: connected instrument readouts ————————————— */
-  .kpi {
-    padding: 0.85rem 1.15rem;
-  }
+  .kpi { padding: 1rem 1.15rem; }
   .kpi-label {
     font-family: var(--font-mono);
     font-size: 10.5px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-faint);
+    font-weight: 700;
   }
   .kpi-value {
-    font-family: var(--font-mono);
-    font-size: 1.9rem;
-    font-weight: 600;
-    line-height: 1.1;
+    font-family: var(--font-sans);
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1.05;
     font-variant-numeric: tabular-nums;
     margin-top: 0.25rem;
+    color: var(--color-brand);
   }
 
-  /* — Data table: dense, ruled, tabular ————————————————— */
-  .data-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
   .data-table thead th {
     text-align: left;
     font-family: var(--font-mono);
-    font-size: 10.5px; letter-spacing: 0.07em; text-transform: uppercase;
-    color: var(--color-faint);
-    font-weight: 500;
-    padding: 0.55rem 1rem;
+    font-size: 10.5px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    font-weight: 700;
+    padding: 0.7rem 1rem;
     background: var(--color-raised);
-    border-bottom: 1px solid var(--color-line-strong);
+    border-bottom: 1px solid var(--color-line);
   }
   .data-table tbody td {
-    padding: 0.55rem 1rem;
+    padding: 0.7rem 1rem;
     border-bottom: 1px solid var(--color-line);
     color: var(--color-ink);
   }
-  .data-table tbody tr { transition: background 0.1s; }
+  .data-table tbody tr { transition: background 0.12s; }
   .data-table tbody tr:hover { background: var(--color-raised); }
   .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 }
