@@ -32,6 +32,8 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
+        $this->call(FixedDemoUsersSeeder::class);
+
         // Demo data is seeded once. On redeploys the admin above is kept in sync
         // and we stop here, so running this seeder on every boot stays idempotent.
         if (Equipement::query()->exists()) {
