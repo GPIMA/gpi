@@ -10,7 +10,6 @@ GPIMA/gpi
 ├── frontend/                 # Application React/Vite + vitrine publique
 ├── docs/                     # Documentation technique et déploiement
 ├── render.yaml               # Déploiement backend + database sur Render
-├── DEPLOYMENT_LINKING.md     # Ancien guide supprimé / remplacé par docs/DEPLOYMENT.md
 └── README.md                 # Vue générale du projet
 ```
 
