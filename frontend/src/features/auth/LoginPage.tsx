@@ -21,7 +21,7 @@ export function LoginPage() {
     setBusy(true)
     try {
       await login(email, password)
-      navigate('/', { replace: true })
+      navigate('/dashboard', { replace: true })
     } catch (err) {
       const apiMessage = isAxiosError(err)
         ? (err.response?.data?.errors?.email?.[0] ?? err.response?.data?.message)
