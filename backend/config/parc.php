@@ -12,7 +12,7 @@ return [
 
     'admin' => [
         'email' => env('ADMIN_EMAIL', 'admin@gpi.local'),
-        'password' => env('ADMIN_PASSWORD'),
+        'password' => env('ADMIN_PASSWORD', 'password'),
         'nom' => env('ADMIN_NOM', 'Admin'),
         'prenom' => env('ADMIN_PRENOM', 'GPI'),
     ],
@@ -20,14 +20,14 @@ return [
     'demo_users' => [
         'employe' => [
             'email' => env('DEMO_EMPLOYE_EMAIL', 'employe@gpi.local'),
-            'password' => env('DEMO_EMPLOYE_PASSWORD'),
+            'password' => env('DEMO_EMPLOYE_PASSWORD', 'password'),
             'nom' => env('DEMO_EMPLOYE_NOM', 'Employe'),
             'prenom' => env('DEMO_EMPLOYE_PRENOM', 'Demo'),
             'departement' => env('DEMO_EMPLOYE_DEPARTEMENT', 'Support interne'),
         ],
         'technicien' => [
             'email' => env('DEMO_TECHNICIEN_EMAIL', 'technicien@gpi.local'),
-            'password' => env('DEMO_TECHNICIEN_PASSWORD'),
+            'password' => env('DEMO_TECHNICIEN_PASSWORD', 'password'),
             'nom' => env('DEMO_TECHNICIEN_NOM', 'Technicien'),
             'prenom' => env('DEMO_TECHNICIEN_PRENOM', 'Demo'),
             'specialite' => env('DEMO_TECHNICIEN_SPECIALITE', 'Support IT'),
