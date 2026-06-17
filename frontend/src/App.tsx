@@ -1,5 +1,5 @@
-import { lazy, Suspense } from 'react'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/app/AppShell'
 import { RequireAuth } from '@/app/RequireAuth'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
@@ -21,6 +21,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<VitrineRedirect />} />
         <Route path="/login" element={<LoginPage />} />
 
         <Route
@@ -39,7 +40,7 @@ export default function App() {
               </ErrorBoundary>
             }
           >
-            <Route index element={<DashboardPage />} />
+            <Route path="dashboard" element={<DashboardPage />} />
             <Route path="equipements" element={<EquipementsPage />} />
             <Route path="supervision" element={<SupervisionPage />} />
             <Route path="alertes" element={<AlertesPage />} />
@@ -57,8 +58,14 @@ export default function App() {
   )
 }
 
-// Nested layout route so a single Suspense boundary wraps all lazy pages.
-import { Outlet } from 'react-router-dom'
+function VitrineRedirect() {
+  useEffect(() => {
+    window.location.replace('/vitrine/')
+  }, [])
+
+  return null
+}
+
 function PageOutlet() {
   return <Outlet />
 }
