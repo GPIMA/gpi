@@ -7,6 +7,7 @@
   <meta name="description" content="Vitrine professionnelle du projet GPI : gestion, supervision et pilotage intelligent du parc informatique." />
   <link rel="icon" href="assets/favicon.svg" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="auth.css" />
 </head>
 <body>
   <div class="progress" aria-hidden="true"></div>
@@ -26,6 +27,11 @@
       <a href="#contact">Contact</a>
     </nav>
 
+    <div class="header-actions" aria-label="Accès application">
+      <a class="auth-btn auth-btn--login" href="/login">Se connecter</a>
+      <a class="auth-btn auth-btn--signup" href="#contact">S’inscrire</a>
+    </div>
+
     <button class="menu" data-menu type="button" aria-label="Ouvrir le menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -43,6 +49,10 @@
           <div class="hero__actions">
             <a class="btn btn--primary" href="#solution">Découvrir le projet</a>
             <a class="btn btn--secondary" href="#interface">Voir l’interface</a>
+          </div>
+          <div class="hero__access">
+            <a class="auth-btn auth-btn--signup" href="/login">Accéder à l’application</a>
+            <span class="access-note">Connexion sécurisée pour les utilisateurs autorisés.</span>
           </div>
         </div>
 
@@ -154,6 +164,20 @@
           <a class="doc-card reveal" href="usecase.html"><span>03</span><h3>Use Case</h3><p>Acteurs et fonctionnalités principales.</p></a>
           <a class="doc-card reveal" href="sequences.html"><span>04</span><h3>Séquences</h3><p>Parcours métier expliqués simplement.</p></a>
           <a class="doc-card reveal" href="classes.html"><span>05</span><h3>Classes</h3><p>Modèle métier de l’application.</p></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section app-access" id="acces">
+      <div class="container app-access__card reveal">
+        <div>
+          <p class="eyebrow">Accès application</p>
+          <h2>Connectez-vous pour utiliser GPI.</h2>
+          <p>L’accès à l’application web est réservé aux utilisateurs autorisés. Pour créer un compte, envoyez une demande d’accès via le formulaire.</p>
+        </div>
+        <div class="app-access__actions">
+          <a class="btn btn--primary" href="/login">Se connecter</a>
+          <a class="btn btn--secondary" href="#contact">S’inscrire</a>
         </div>
       </div>
     </section>
