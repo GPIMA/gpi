@@ -1,10 +1,16 @@
 import axios from 'axios'
 import i18n from '@/lib/i18n'
 
-// The backend is a separate deployment — its URL is injected at build time.
-const baseURL = `${import.meta.env.VITE_API_URL ?? 'http://localhost:8000'}/api`
+function normalizeApiBaseUrl(): string {
+  const raw = import.meta.env.VITE_API_URL?.trim()
+  const fallback = import.meta.env.PROD ? '' : 'http://localhost:8000'
+  const origin = (raw || fallback).replace(/\/$/, '')
 
-const TOKEN_KEY = 'hk_token'
+  return origin ? `${origin}/api` : '/api'
+}
+
+const baseURL = normalizeApiBaseUrl()
+const TOKEN_KEY = 'gpi_token'
 
 export const tokenStore = {
   get: () => localStorage.getItem(TOKEN_KEY),
@@ -17,7 +23,6 @@ export const api = axios.create({
   headers: { Accept: 'application/json' },
 })
 
-// Attach the bearer token and the active locale to every request.
 api.interceptors.request.use((config) => {
   const token = tokenStore.get()
   if (token) config.headers.Authorization = `Bearer ${token}`
@@ -25,7 +30,6 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// A 401 means the token is gone or stale — drop it and bounce to login.
 api.interceptors.response.use(
   (response) => response,
   (error) => {
