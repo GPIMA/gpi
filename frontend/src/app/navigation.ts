@@ -21,7 +21,7 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     titleKey: 'exploitation',
     items: [
-      { to: '/', key: 'dashboard', icon: 'dashboard' },
+      { to: '/dashboard', key: 'dashboard', icon: 'dashboard' },
       { to: '/equipements', key: 'equipements', icon: 'equipements' },
       { to: '/supervision', key: 'supervision', icon: 'supervision' },
       { to: '/alertes', key: 'alertes', icon: 'alertes' },
