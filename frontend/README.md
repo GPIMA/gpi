@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+# Frontend GPI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface React/Vite du projet **Gestion de Parc Informatique**.
 
-Currently, two official plugins are available:
+## Rôle
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Le frontend contient :
 
-## React Compiler
+- la vitrine publique ;
+- la page de connexion ;
+- le dashboard ;
+- les modules équipements, incidents, alertes, supervision, prédictions, assistant et administration ;
+- le client API qui communique avec le backend Laravel.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Démarrage rapide
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+cp .env.example .env
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Frontend local :
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```txt
+http://localhost:5173
 ```
+
+## Liaison backend
+
+Dans `.env` :
+
+```env
+VITE_API_URL=http://localhost:8000
+```
+
+En production :
+
+```env
+VITE_API_URL=https://votre-backend.com
+```
+
+## Structure importante
+
+```txt
+public/vitrine/       # Vitrine publique HTML/CSS/JS
+src/app/              # Routes, layout, navigation
+src/components/       # Composants réutilisables
+src/features/         # Modules métier
+src/lib/api/          # Client API Axios
+src/styles/           # Design system global
+```
+
+## Routes principales
+
+```txt
+/              -> vitrine
+/vitrine/      -> vitrine publique
+/login         -> connexion
+/dashboard     -> application après connexion
+```
+
+Documentation déploiement : [`../docs/DEPLOYMENT.md`](../docs/DEPLOYMENT.md)
