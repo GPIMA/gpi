@@ -20,12 +20,14 @@ class EquipementController extends Controller
             ->when($request->filled('type'), fn ($q) => $q->where('type', $request->string('type')))
             ->when($request->filled('etat'), fn ($q) => $q->where('etat', $request->string('etat')))
             ->when($request->filled('q'), function ($q) use ($request) {
-                $terme = '%'.$request->string('q').'%';
+                $terme = '%'.mb_strtolower($request->string('q')->toString()).'%';
+
                 $q->where(fn ($sub) => $sub
-                    ->where('nom', 'ilike', $terme)
-                    ->orWhere('adresse_ip', 'ilike', $terme)
-                    ->orWhere('marque', 'ilike', $terme)
-                    ->orWhere('modele', 'ilike', $terme));
+                    ->whereRaw('LOWER(nom) LIKE ?', [$terme])
+                    ->orWhereRaw('LOWER(COALESCE(adresse_ip, \'\')) LIKE ?', [$terme])
+                    ->orWhereRaw('LOWER(COALESCE(marque, \'\')) LIKE ?', [$terme])
+                    ->orWhereRaw('LOWER(COALESCE(modele, \'\')) LIKE ?', [$terme])
+                    ->orWhereRaw('LOWER(COALESCE(localisation, \'\')) LIKE ?', [$terme]));
             })
             ->orderByDesc('created_at')
             ->paginate($request->integer('per_page', 15))
