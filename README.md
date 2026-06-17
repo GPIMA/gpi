@@ -1,94 +1,108 @@
-# HK — Système Intelligent de Gestion de Parc IT
+# GPI — Gestion de Parc Informatique
 
-Intelligent IT fleet management system. Built from a supplied UML class diagram
-and use-case diagram. **French** is the primary language, **English** secondary.
+GPI est une application web complète pour gérer, superviser et organiser un parc informatique. Le projet contient une vitrine publique, une interface de connexion, un dashboard applicatif, une API Laravel et une base de données.
 
-The project is split into two independently deployable applications so each can
-be hosted on a different platform:
+## Structure du dépôt
 
-| App | Stack | Role |
+```txt
+GPIMA/gpi
+├── backend/                  # API Laravel, auth, database, seeders, services métier
+├── frontend/                 # Application React/Vite + vitrine publique
+├── docs/                     # Documentation technique et déploiement
+├── render.yaml               # Déploiement backend + database sur Render
+├── DEPLOYMENT_LINKING.md     # Ancien guide supprimé / remplacé par docs/DEPLOYMENT.md
+└── README.md                 # Vue générale du projet
+```
+
+## Applications
+
+| Partie | Chemin | Rôle |
 | --- | --- | --- |
-| [`backend/`](backend) | Laravel 13 (PHP 8.5) · PostgreSQL · Sanctum | MVC REST API |
-| [`frontend/`](frontend) | React + Vite + TypeScript | "NOC console" SPA |
+| Vitrine | `frontend/public/vitrine/` | Présentation publique du projet GPI |
+| Frontend | `frontend/` | Interface React : login, dashboard, modules |
+| Backend | `backend/` | API Laravel sécurisée avec Sanctum |
+| Database | `backend/database/` | Migrations, factories et seeders |
+| Docs | `docs/` | Déploiement, architecture et organisation |
 
-The frontend talks to the backend **only** over `VITE_API_URL`; the API trusts
-**only** the origins listed in `FRONTEND_URL` (CORS). They share no code.
+## Liens principaux
 
-## Architecture (MVC)
+```txt
+Frontend production : https://gpi-umber.vercel.app/
+Vitrine             : https://gpi-umber.vercel.app/vitrine/
+Login               : https://gpi-umber.vercel.app/login
+Dashboard           : https://gpi-umber.vercel.app/dashboard
+```
 
-- **Model** — Eloquent models + PostgreSQL migrations, one per domain entity from
-  the class diagram. The abstract `Utilisateur` hierarchy (Administrateur /
-  Technicien / Employé) maps to a single `users` table with a `role`
-  discriminator (`App\Enums\RoleUtilisateur`).
-- **View** — JSON API Resources (`app/Http/Resources`); the React app is the
-  presentation layer.
-- **Controller** — thin resource controllers (`app/Http/Controllers`) delegating
-  business logic to services (`app/Services`).
+## Démarrage local
 
-### No hardcoding
-- The 8 data-dictionary enums live in `app/Enums` and are exposed, localized,
-  through `GET /api/enums`. The frontend's option lists, filters and labels all
-  come from there — none are duplicated in React.
-- Tunables (thresholds, scan/simulation params, seeded admin) live in
-  `config/parc.php` and the environment, never inline in classes.
-- Secrets (DB, admin password, chatbot API key) are environment-only.
-
-## Prerequisites
-- PHP 8.5 + Composer, Node 20+, PostgreSQL 17 (all installed via Homebrew).
-
-## Run locally
+### 1. Backend
 
 ```bash
-# 1. Database (once)
-brew services start postgresql@17
-
-# 2. Backend  →  http://localhost:8000
 cd backend
-cp .env.example .env           # then set DB_PASSWORD + ADMIN_PASSWORD
+composer install
+cp .env.example .env
 php artisan key:generate
-php artisan migrate:fresh --seed
-php artisan serve --port=8000
+php -r "file_exists('database/database.sqlite') || touch('database/database.sqlite');"
+php artisan migrate --seed
+php artisan serve
+```
 
-# 3. Frontend →  http://localhost:5173
-cd ../frontend
+API locale :
+
+```txt
+http://localhost:8000/api
+```
+
+### 2. Frontend
+
+```bash
+cd frontend
+cp .env.example .env
 npm install
 npm run dev
 ```
 
-Sign in with the seeded administrator (the `ADMIN_EMAIL` / `ADMIN_PASSWORD`
-from `backend/.env`).
+Frontend local :
 
-## Features
-
-All modules are implemented, French primary / English secondary throughout:
-
-- **Authentication & roles** — Sanctum bearer tokens; Administrateur / Technicien
-  / Employé with route-level RBAC.
-- **Équipements** — fleet CRUD, filters, pagination, employee assignments, and a
-  simulated SNMP network scan that auto-discovers devices.
-- **Supervision** — per-device CPU/RAM/disk metrics with history charts; a
-  schedulable `parc:superviser` tick simulates readings and runs the alert engine.
-- **Alertes & règles** — configurable threshold rules evaluated against metrics;
-  alerts can be taken over and resolved.
-- **Incidents** — employees report faults; technicians take over and resolve them;
-  the reporter is notified (in-app notification bell).
-- **Prédictions (IA)** — a statistical model projects metric trends into failure
-  probabilities and raises preventive alerts. Swappable for a trained model.
-- **Assistant (chatbot)** — IT-help chat with a pluggable driver: an offline
-  rule-based knowledge base by default, or any OpenAI-compatible API via env.
-- **Administration** — user management for administrators.
-
-### Assistant driver
-
-Set in `backend/.env` (no keys in code):
-
-```dotenv
-CHATBOT_DRIVER=rule          # offline knowledge base (default)
-# or, for a free OpenAI-compatible API (Groq, OpenRouter, …):
-CHATBOT_DRIVER=openai
-CHATBOT_BASE_URL=https://api.groq.com/openai/v1
-CHATBOT_API_KEY=sk-...
-CHATBOT_MODEL=llama-3.1-8b-instant
+```txt
+http://localhost:5173
 ```
 
-Missing key ⇒ automatic fallback to the rule-based driver.
+## Identifiants admin de test
+
+```txt
+Email       : admin@gpi.local
+Mot de passe: Gpi@2026
+```
+
+## Fonctionnalités principales
+
+- Authentification par token Sanctum.
+- Gestion des utilisateurs par rôles : administrateur, technicien, employé.
+- Gestion complète des équipements informatiques.
+- Affectations des équipements aux employés.
+- Déclaration et suivi des incidents.
+- Alertes automatiques selon les métriques.
+- Supervision CPU, RAM et disque.
+- Notifications internes.
+- Prédictions IA simulées.
+- Assistant chatbot.
+- Vitrine publique professionnelle.
+
+## Documentation
+
+- Organisation du dépôt : [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md)
+- Backend et base de données : [`docs/BACKEND.md`](docs/BACKEND.md)
+- Déploiement et liaison frontend/backend : [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md)
+
+## Déploiement
+
+Le frontend est prévu pour Vercel. Le backend Laravel doit être déployé séparément sur Render, Railway, VPS ou autre hébergeur compatible Laravel.
+
+Après déploiement backend, ajouter dans Vercel :
+
+```env
+VITE_API_URL=https://votre-backend.com
+```
+
+Puis redéployer le frontend.
