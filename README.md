@@ -17,7 +17,6 @@ GPIMA/gpi
 | Partie | Chemin | Rôle |
 | --- | --- | --- |
 | Vitrine | `frontend/public/vitrine/` | Présentation publique du projet GPI |
-| Assistant CV | `frontend/public/assistant-cv/` | Analyse CV, score ATS, CV optimisé et lettre de motivation |
 | Frontend | `frontend/` | Interface React : login, dashboard, modules |
 | Backend | `backend/` | API Laravel sécurisée avec Sanctum |
 | Database | `backend/database/` | Migrations, factories et seeders |
@@ -27,7 +26,6 @@ GPIMA/gpi
 ```txt
 Frontend production : https://gpi-umber.vercel.app/
 Vitrine             : https://gpi-umber.vercel.app/vitrine/
-Assistant CV        : https://gpi-umber.vercel.app/assistant-cv/
 Login               : https://gpi-umber.vercel.app/login
 Dashboard           : https://gpi-umber.vercel.app/dashboard
 ```
