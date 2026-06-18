@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assistant CV & Lettre de Motivation</title>
+  <meta name="description" content="Application web pour analyser un CV, comparer avec une offre, calculer un score ATS et générer une lettre de motivation." />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root{
+      --bg:#f6f2eb; --card:#fffaf3; --ink:#1f2933; --muted:#667085; --line:#e6dccd;
+      --accent:#9a6a3a; --accent2:#1d4ed8; --good:#15803d; --mid:#b45309; --bad:#b91c1c;
+      --shadow:0 24px 70px rgba(36,25,12,.12); --radius:26px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;background:linear-gradient(135deg,#f6f2eb 0%,#fff 48%,#efe5d5 100%);color:var(--ink)}
+    .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 60px}
+    header{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center;margin:18px 0 32px}
+    .hero{background:rgba(255,250,243,.82);border:1px solid var(--line);border-radius:34px;padding:38px;box-shadow:var(--shadow);backdrop-filter:blur(14px)}
+    .badge{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--accent);font-weight:700;background:#fff}
+    h1{font-size:clamp(34px,5vw,64px);line-height:.98;margin:18px 0 16px;letter-spacing:-.055em}
+    .lead{font-size:18px;line-height:1.6;color:var(--muted);max-width:760px;margin:0}
+    .panel{background:rgba(255,255,255,.76);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 18px 50px rgba(36,25,12,.08)}
+    .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
+    .stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
+    .stat strong{font-size:28px;display:block;color:var(--accent)}.stat span{color:var(--muted);font-size:13px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.full{grid-column:1/-1}
+    label{display:block;font-size:14px;font-weight:800;margin:0 0 8px;color:#344054}
+    textarea,input[type=file]{width:100%;border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px;font:inherit;color:var(--ink)}
+    textarea{min-height:230px;resize:vertical;line-height:1.55}.small{min-height:150px}
+    .hint{font-size:13px;color:var(--muted);margin:8px 0 0;line-height:1.5}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    button{border:0;border-radius:999px;padding:13px 18px;font-weight:900;cursor:pointer;background:var(--ink);color:#fff;box-shadow:0 10px 25px rgba(31,41,51,.14)}
+    button.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none}button.accent{background:var(--accent)}
+    button:disabled{opacity:.55;cursor:not-allowed}.section-title{display:flex;align-items:end;justify-content:space-between;margin:24px 0 12px;gap:16px}
+    h2{font-size:28px;letter-spacing:-.03em;margin:0}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .metric{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px}.metric b{font-size:36px}.metric p{margin:6px 0 0;color:var(--muted)}
+    .progress{height:12px;background:#efe7dc;border-radius:999px;overflow:hidden;margin-top:12px}.bar{height:100%;width:0;background:var(--accent);border-radius:999px;transition:.5s}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}.chip{padding:8px 10px;border-radius:999px;background:#f2eadf;border:1px solid #e6dccd;font-size:13px;font-weight:700;color:#4b5563}.chip.good{background:#eaf7ef;color:var(--good);border-color:#bfe7cc}.chip.bad{background:#fff0f0;color:var(--bad);border-color:#ffd0d0}
+    .output{white-space:pre-wrap;background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;line-height:1.62;min-height:160px;color:#24303f}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.tab{background:#fff;color:#344054;border:1px solid var(--line);box-shadow:none}.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .notice{border:1px solid #f3d29c;background:#fff7ed;color:#7c3e08;border-radius:18px;padding:14px;line-height:1.55}.footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
+    @media(max-width:860px){header,.grid,.cards{grid-template-columns:1fr}.hero{padding:24px}.stats{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="hero">
+        <span class="badge">Assistant intelligent de candidature</span>
+        <h1>Optimise ton CV pour une offre précise.</h1>
+        <p class="lead">Importe ton CV PDF, colle une offre d’emploi, puis génère un score ATS, les mots-clés présents/manquants, une version optimisée du CV et une lettre de motivation personnalisée.</p>
+        <div class="stats">
+          <div class="stat"><strong>ATS</strong><span>Score de compatibilité</span></div>
+          <div class="stat"><strong>PDF</strong><span>Exports téléchargeables</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="notice"><b>Important :</b> l’application améliore seulement les informations déjà présentes dans le CV. Elle n’invente pas de diplôme, d’expérience ou de compétence.</div>
+        <div style="height:16px"></div>
+        <div class="row">
+          <button class="accent" onclick="analyze()">Analyser maintenant</button>
+          <button class="secondary" onclick="loadExample()">Tester avec un exemple</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div class="panel">
+        <label>1. Importer le CV en PDF</label>
+        <input id="pdfFile" type="file" accept="application/pdf" />
+        <p class="hint">Le texte extrait apparaîtra automatiquement ci-dessous. En cas d’erreur, colle directement le texte du CV.</p>
+        <label style="margin-top:14px">Texte du CV</label>
+        <textarea id="cvText" placeholder="Le texte du CV apparaîtra ici..."></textarea>
+      </div>
+      <div class="panel">
+        <label>2. Coller l’offre d’emploi</label>
+        <textarea id="jobText" placeholder="Colle ici l’offre d’emploi complète..."></textarea>
+        <p class="hint">Plus l’offre est complète, plus l’analyse des mots-clés et le score ATS seront pertinents.</p>
+      </div>
+    </section>
+
+    <section class="section-title">
+      <h2>Résultat de l’analyse</h2>
+      <div class="row">
+        <button onclick="analyze()">Actualiser</button>
+        <button class="secondary" onclick="clearAll()">Réinitialiser</button>
+      </div>
+    </section>
+
+    <section class="cards">
+      <div class="metric"><b id="score">0%</b><p>Score ATS estimé</p><div class="progress"><div id="scoreBar" class="bar"></div></div></div>
+      <div class="metric"><b id="presentCount">0</b><p>Mots-clés présents</p></div>
+      <div class="metric"><b id="missingCount">0</b><p>Mots-clés à ajouter si réels</p></div>
+    </section>
+
+    <section class="grid" style="margin-top:20px">
+      <div class="panel">
+        <label>Compétences / mots-clés présents</label>
+        <div id="presentKeywords" class="chips"></div>
+      </div>
+      <div class="panel">
+        <label>Mots-clés manquants</label>
+        <div id="missingKeywords" class="chips"></div>
+      </div>
+    </section>
+
+    <section class="panel full" style="margin-top:20px">
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('cv', this)">CV optimisé</button>
+        <button class="tab" onclick="showTab('letter', this)">Lettre de motivation</button>
+        <button class="tab" onclick="showTab('report', this)">Rapport ATS</button>
+      </div>
+      <div id="cvOut" class="output"></div>
+      <div id="letterOut" class="output" style="display:none"></div>
+      <div id="reportOut" class="output" style="display:none"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="accent" onclick="downloadPDF('cv')">Télécharger CV PDF</button>
+        <button class="accent" onclick="downloadPDF('letter')">Télécharger lettre PDF</button>
+        <button class="secondary" onclick="downloadPDF('report')">Télécharger rapport ATS PDF</button>
+      </div>
+    </section>
+
+    <p class="footer">Assistant CV & Lettre de motivation — version web déployable.</p>
+  </div>
+
+  <script type="module">
+    import * as pdfjsLib from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+    const fileInput = document.getElementById('pdfFile');
+    fileInput.addEventListener('change', async (e)=>{
+      const file=e.target.files[0]; if(!file) return;
+      try{
+        const buffer=await file.arrayBuffer();
+        const pdf=await pdfjsLib.getDocument({data:buffer}).promise;
+        let text='';
+        for(let i=1;i<=pdf.numPages;i++){
+          const page=await pdf.getPage(i);
+          const content=await page.getTextContent();
+          text += content.items.map(item=>item.str).join(' ') + '\n\n';
+        }
+        document.getElementById('cvText').value=text.trim();
+      }catch(err){
+        alert('Extraction PDF impossible. Colle le texte du CV manuellement.');
+      }
+    });
+  </script>
+
+  <script>
+    const stopWords = new Set('avec pour dans sans sur une des les aux vous nous votre notre cette cela elle il ils qui que quoi dont et ou de du la le un en au par est sont être avoir plus moins ainsi comme poste mission missions profil candidat expérience expériences formation diplôme stage stages'.split(' '));
+    const hardSkills = ['python','java','javascript','typescript','react','angular','vue','node','php','laravel','sql','mysql','postgresql','mongodb','excel','power bi','tableau','streamlit','scikit-learn','machine learning','ia','api','git','github','docker','cloud','aws','azure','figma','canva','seo','crm','vente','marketing','communication','gestion de projet','analyse de données','finance','comptabilité','rh','recrutement','logistique','supply chain'];
+    const softSkills = ['communication','autonomie','rigueur','organisation','leadership','esprit d’équipe','adaptabilité','créativité','curiosité','proactivité','analyse','sens du détail','relation client','négociation'];
+
+    function norm(t){return (t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9+.#\s-]/g,' ').replace(/\s+/g,' ').trim();}
+    function words(text){return norm(text).split(' ').filter(w=>w.length>3 && !stopWords.has(w));}
+    function topTerms(text, limit=28){
+      const freq={}; words(text).forEach(w=>freq[w]=(freq[w]||0)+1);
+      return Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,limit).map(x=>x[0]);
+    }
+    function extractKeywords(job){
+      const n=norm(job), found=[];
+      [...hardSkills,...softSkills].forEach(k=>{ if(n.includes(norm(k))) found.push(k); });
+      topTerms(job,24).forEach(k=>{ if(!found.includes(k)) found.push(k); });
+      return [...new Set(found)].slice(0,36);
+    }
+    function getTitle(job){
+      const lines=(job||'').split('\n').map(x=>x.trim()).filter(Boolean);
+      const first=lines.find(l=>l.length>5 && l.length<90) || 'le poste visé';
+      return first.replace(/offre|emploi|poste|h\/f|f\/h/ig,'').trim() || 'le poste visé';
+    }
+    function analyze(){
+      const cv=document.getElementById('cvText').value.trim();
+      const job=document.getElementById('jobText').value.trim();
+      if(!cv || !job){ alert('Ajoute le texte du CV et l’offre d’emploi.'); return; }
+      const cvn=norm(cv), keywords=extractKeywords(job);
+      const present=keywords.filter(k=>cvn.includes(norm(k)));
+      const missing=keywords.filter(k=>!cvn.includes(norm(k)));
+      const score=Math.round((present.length/Math.max(keywords.length,1))*100);
+      document.getElementById('score').textContent=score+'%'; document.getElementById('scoreBar').style.width=score+'%';
+      document.getElementById('scoreBar').style.background=score>=70?'var(--good)':score>=45?'var(--mid)':'var(--bad)';
+      document.getElementById('presentCount').textContent=present.length; document.getElementById('missingCount').textContent=missing.length;
+      document.getElementById('presentKeywords').innerHTML=present.map(k=>`<span class="chip good">${escapeHtml(k)}</span>`).join('') || '<span class="chip">Aucun détecté</span>';
+      document.getElementById('missingKeywords').innerHTML=missing.map(k=>`<span class="chip bad">${escapeHtml(k)}</span>`).join('') || '<span class="chip good">Aucun mot-clé majeur manquant</span>';
+      const title=getTitle(job);
+      const profileKeywords=present.slice(0,7).join(', ');
+      const realMissing=missing.slice(0,10).join(', ');
+      const cvOptimized = `CV OPTIMISÉ — version alignée avec l’offre\n\nPROFIL PROFESSIONNEL\nCandidat motivé pour ${title}, avec un profil à valoriser autour des éléments présents dans le CV : ${profileKeywords || 'compétences et expériences existantes'}.\n\nCOMPÉTENCES À METTRE EN AVANT\n${present.map(k=>'• '+cap(k)).join('\n') || '• À compléter à partir du CV'}\n\nEXPÉRIENCES\nReprendre les expériences réelles du CV et reformuler chaque mission avec des verbes d’action, des résultats mesurables et les mots-clés réellement maîtrisés.\n\nEXEMPLES DE FORMULATION\n• Analyse et réalisation de missions liées à ${present[0] || 'l’activité du poste'}, avec respect des objectifs et des délais.\n• Contribution à des projets nécessitant ${present[1] || 'organisation'}, ${present[2] || 'communication'} et esprit d’équipe.\n• Utilisation des compétences existantes pour répondre aux besoins du poste sans ajouter d’information non vérifiée.\n\nMOTS-CLÉS À AJOUTER UNIQUEMENT SI RÉELS\n${realMissing || 'Aucun mot-clé prioritaire manquant.'}`;
+      const letter = `Objet : Candidature pour ${title}\n\nMadame, Monsieur,\n\nJe vous adresse ma candidature pour ${title}. Votre offre a retenu mon attention car elle correspond à mon parcours, à mes compétences et à mon intérêt pour les missions proposées.\n\nÀ travers mon CV, je souhaite mettre en avant mes compétences en ${profileKeywords || 'organisation, analyse et communication'}, ainsi que ma capacité à m’adapter rapidement à un environnement professionnel exigeant. Les éléments de votre offre montrent l’importance de qualités telles que ${present.slice(3,6).join(', ') || 'la rigueur, l’autonomie et l’esprit d’équipe'}, que je suis motivé à mobiliser dans ce poste.\n\nJe suis particulièrement intéressé par l’opportunité de contribuer concrètement aux objectifs de votre organisation, tout en développant mes compétences dans un cadre professionnel structuré.\n\nJe serais ravi d’échanger avec vous afin de vous présenter plus en détail ma motivation et la manière dont mon profil peut répondre à vos besoins.\n\nVeuillez agréer, Madame, Monsieur, l’expression de mes salutations distinguées.`;
+      const report = `RAPPORT ATS\n\nScore estimé : ${score}%\n\nMots-clés présents :\n${present.map(k=>'• '+cap(k)).join('\n') || 'Aucun'}\n\nMots-clés absents :\n${missing.map(k=>'• '+cap(k)).join('\n') || 'Aucun'}\n\nRecommandations :\n• Ajouter les mots-clés manquants seulement s’ils correspondent à des compétences réelles.\n• Reformuler les expériences avec des verbes d’action.\n• Ajouter des chiffres quand c’est possible : durée, volume, résultat, outil utilisé.\n• Garder une structure simple : Profil, Expériences, Formation, Compétences.\n• Éviter les informations inventées ou exagérées.`;
+      document.getElementById('cvOut').textContent=cvOptimized;
+      document.getElementById('letterOut').textContent=letter;
+      document.getElementById('reportOut').textContent=report;
+    }
+    function showTab(name, btn){
+      ['cv','letter','report'].forEach(x=>document.getElementById(x+'Out').style.display=x===name?'block':'none');
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); btn.classList.add('active');
+    }
+    function downloadPDF(type){
+      const map={cv:['cvOut','CV_optimise.pdf','CV optimisé'],letter:['letterOut','Lettre_motivation.pdf','Lettre de motivation'],report:['reportOut','Rapport_ATS.pdf','Rapport ATS']};
+      const [id,file,title]=map[type]; const text=document.getElementById(id).textContent.trim();
+      if(!text){alert('Lance d’abord l’analyse.');return;}
+      const {jsPDF}=window.jspdf; const doc=new jsPDF({unit:'pt',format:'a4'});
+      const margin=44, width=508; let y=54;
+      doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.text(title, margin, y); y+=28;
+      doc.setFont('helvetica','normal'); doc.setFontSize(10.5);
+      const lines=doc.splitTextToSize(text,width);
+      lines.forEach(line=>{ if(y>790){doc.addPage(); y=50;} doc.text(line,margin,y); y+=15; });
+      doc.save(file);
+    }
+    function loadExample(){
+      document.getElementById('cvText').value='Profil étudiant en informatique avec expérience en Python, Excel, communication et gestion de projet. Formation en développement web. Projet réalisé avec React, GitHub, SQL et analyse de données. Stage en support utilisateur avec suivi des incidents et rédaction de rapports.';
+      document.getElementById('jobText').value='Développeur web junior React / Python. Missions : développer des interfaces, gérer les données SQL, utiliser GitHub, travailler en équipe, communiquer avec les utilisateurs, analyser les besoins, être rigoureux et autonome.';
+      analyze();
+    }
+    function clearAll(){['cvText','jobText','cvOut','letterOut','reportOut'].forEach(id=>document.getElementById(id).value!==undefined?document.getElementById(id).value='':document.getElementById(id).textContent='');document.getElementById('score').textContent='0%';document.getElementById('scoreBar').style.width='0';document.getElementById('presentCount').textContent='0';document.getElementById('missingCount').textContent='0';document.getElementById('presentKeywords').innerHTML='';document.getElementById('missingKeywords').innerHTML='';}
+    function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+    function cap(s){return String(s).charAt(0).toUpperCase()+String(s).slice(1);}
+    window.analyze=analyze; window.showTab=showTab; window.downloadPDF=downloadPDF; window.loadExample=loadExample; window.clearAll=clearAll;
+  </script>
+</body>
+</html>
