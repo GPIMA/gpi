@@ -22,12 +22,6 @@ RUN composer install --optimize-autoloader --no-interaction --no-progress \
     && mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+EXPOSE 8080
 # Railway injects $PORT at runtime.
-# Migrations run via session pooler (DB_MIGRATE_PORT=5432) when set;
-# otherwise skipped so transaction-pooler-only environments still boot.
-CMD php artisan config:clear \
-    && if [ -n "$DB_MIGRATE_PORT" ]; then \
-         DB_PORT=$DB_MIGRATE_PORT php artisan migrate --force || true; \
-         DB_PORT=$DB_MIGRATE_PORT php artisan db:seed --force || true; \
-       fi \
-    && php artisan serve --host 0.0.0.0 --port "${PORT:-8080}"
+CMD php artisan config:clear && echo ">> Starting on port ${PORT:-8080}" && exec php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
