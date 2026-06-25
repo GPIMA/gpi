@@ -1,28 +1,30 @@
-# GPI backend — Laravel 13 / PHP 8.4 for Railway.
-# 8.4 required: the composer.lock (generated on PHP 8.5) pulls Symfony 8.1,
-# which needs php >= 8.4.1. Predictable build with the Postgres + mbstring exts.
-FROM php:8.4-cli
+# GPI backend — Laravel 13 / PHP 8.4 + Apache for Railway.
+FROM php:8.4-apache
 
-# System libs + PHP extensions (pdo_pgsql for Supabase, mbstring/xml for Laravel).
+# System libs + PHP extensions
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         git unzip libpq-dev libonig-dev libxml2-dev \
     && docker-php-ext-install pdo pdo_pgsql mbstring xml \
+    && a2enmod rewrite \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Point Apache DocumentRoot at Laravel's public/
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
+    && echo 'ServerName localhost' >> /etc/apache2/apache2.conf
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-WORKDIR /app
+WORKDIR /var/www/html
 COPY . .
 
-# Dev deps are kept: the database seeder relies on Faker (fake()) for the demo
-# fleet/users, which lives in require-dev.
 RUN composer install --optimize-autoloader --no-interaction --no-progress \
     && mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
 
-EXPOSE 8080
+# Railway injects $PORT — Apache listens on it via start.sh
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 CMD ["/start.sh"]
