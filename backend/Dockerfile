@@ -23,5 +23,6 @@ RUN composer install --optimize-autoloader --no-interaction --no-progress \
     && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8080
-# Railway injects $PORT at runtime.
-CMD php artisan config:clear && echo ">> Starting on port ${PORT:-8080}" && exec php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+CMD ["/start.sh"]
