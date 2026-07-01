@@ -5,21 +5,22 @@
     "tagline": "Intelligent IT fleet management system"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "equipements": "Equipment fleet",
-    "supervision": "Monitoring",
-    "alertes": "Alerts",
-    "regles": "Alert rules",
-    "incidents": "Incidents",
-    "predictions": "Predictions",
-    "chatbot": "Assistant",
-    "administration": "Administration",
-    "sections": {
-      "exploitation": "Operations",
-      "intelligence": "Intelligence",
-      "systeme": "System"
-    }
-  },
+  "dashboard": "Dashboard",
+  "equipements": "Equipment fleet",
+  "supervision": "Monitoring",
+  "alertes": "Alerts",
+  "regles": "Alert rules",
+  "incidents": "Incidents",
+  "predictions": "Predictions",
+  "chatbot": "Assistant",
+  "administration": "Administration",
+  "demandes": "Registration requests",
+  "sections": {
+    "exploitation": "Operations",
+    "intelligence": "Intelligence",
+    "systeme": "System"
+  }
+},
   "auth": {
     "title": "Sign in",
     "subtitle": "Access the monitoring console",
@@ -37,12 +38,16 @@
     "online": "Online",
     "lastUpdate": "Updated",
     "noData": "No data yet",
-    "comingSoon": "Module in progress"
+    "comingSoon": "Module in progress",
+    "back": "Back"
   },
-  "incidents": {
+ "incidents": {
     "title": "Incidents",
     "subtitle": "Fault reporting and resolution",
     "report": "Report an incident",
+    "reportHint": "Report a new incident on your equipment.",
+    "trackTitle": "Track my incidents",
+    "trackHint": "Check the status of your reported incidents.",
     "filterStatut": "Status",
     "filterPriorite": "Priority",
     "allStatuts": "All statuses",
@@ -255,6 +260,8 @@
       "type": "Type",
       "marque": "Brand",
       "modele": "Model",
+      "numeroSerie": "Serial number",
+"affecteA": "Assigned to",
       "ip": "IP address",
       "mac": "MAC address",
       "etat": "Status",

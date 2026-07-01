@@ -1,7 +1,7 @@
 // Shapes returned by the Laravel API. Domain option lists are never hardcoded
 // here — they arrive at runtime through the /enums endpoint (see EnumOption).
 
-export type Role = 'ADMIN' | 'TECHNICIEN' | 'EMPLOYE'
+export type Role = 'SUPER_ADMIN' | 'ADMIN' | 'TECHNICIEN' | 'EMPLOYE'
 
 export interface Utilisateur {
   id: number
@@ -34,13 +34,14 @@ export interface Equipement {
   typeLabel: string
   marque: string | null
   modele: string | null
+  numeroSerie: string | null
   adresseIP: string | null
   adresseMAC: string | null
   etat: string
   etatLabel: string
   localisation: string | null
   dateAcquisition: string | null
-  affectation?: { id: number; employe: string } | null
+  affectation?: { id: number; employeId: number; employe: string } | null
   dateCreation: string
 }
 
@@ -183,4 +184,16 @@ export interface EnumDictionary {
   statutIncident: EnumOption[]
   expediteurType: EnumOption[]
   roleUtilisateur: EnumOption[]
+}
+export interface DemandeInscription {
+  id: number
+  nom: string
+  prenom: string
+  email: string
+  role: string
+  telephone: string | null
+  departement: string | null
+  message: string | null
+  statut: 'EN_ATTENTE' | 'APPROUVEE' | 'REJETEE'
+  created_at: string
 }

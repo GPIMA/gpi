@@ -36,7 +36,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       tokenStore.clear()
       if (!window.location.pathname.startsWith('/login')) {
-        window.location.assign('/login')
+        // window.location.assign('/login')
       }
     }
     return Promise.reject(error)

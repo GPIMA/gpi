@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlerteController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\DashboardController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\PredictionController;
 use App\Http\Controllers\RegleAlerteController;
 use App\Http\Controllers\ScanReseauController;
 use App\Http\Controllers\UtilisateurController;
+use App\Http\Controllers\DemandeInscriptionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,13 +29,16 @@ Route::get('/health', fn () => response()->json([
     'service' => 'GPI API',
     'version' => '1.0.0',
 ]));
-
+Route::post('/contact', [ContactController::class, 'store']);
+Route::post('/demandes-inscription', [DemandeInscriptionController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/enums', [EnumController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/utilisateurs', [UtilisateurController::class, 'index']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
@@ -44,7 +49,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/equipements/{equipement}/metriques', [MetriqueController::class, 'historique']);
 
     Route::get('/alertes', [AlerteController::class, 'index']);
-    Route::get('/regles-alerte', [RegleAlerteController::class, 'index']);
+
+    Route::middleware('role:SUPER_ADMIN,ADMIN')->group(function () {
+        Route::get('/regles-alerte', [RegleAlerteController::class, 'index']);
+    });
 
     Route::get('/incidents', [IncidentController::class, 'index']);
     Route::get('/incidents/{incident}', [IncidentController::class, 'show']);
@@ -60,7 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/assistant/conversations/{conversation}', [ConversationController::class, 'show']);
     Route::post('/assistant/message', [ConversationController::class, 'envoyer']);
 
-    Route::middleware('role:ADMIN')->group(function () {
+    Route::middleware('role:SUPER_ADMIN,ADMIN')->group(function () {
         Route::post('/equipements', [EquipementController::class, 'store']);
         Route::put('/equipements/{equipement}', [EquipementController::class, 'update']);
         Route::delete('/equipements/{equipement}', [EquipementController::class, 'destroy']);
@@ -70,13 +78,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/regles-alerte/{regle}', [RegleAlerteController::class, 'update']);
         Route::delete('/regles-alerte/{regle}', [RegleAlerteController::class, 'destroy']);
 
-        Route::get('/utilisateurs', [UtilisateurController::class, 'index']);
         Route::post('/utilisateurs', [UtilisateurController::class, 'store']);
         Route::put('/utilisateurs/{utilisateur}', [UtilisateurController::class, 'update']);
         Route::delete('/utilisateurs/{utilisateur}', [UtilisateurController::class, 'destroy']);
-    });
+    
+        Route::get('/demandes-inscription', [DemandeInscriptionController::class, 'index']);
+Route::post('/demandes-inscription/{demande}/approuver', [DemandeInscriptionController::class, 'approuver']);
+Route::post('/demandes-inscription/{demande}/rejeter', [DemandeInscriptionController::class, 'rejeter']);
+Route::post('/incidents/{incident}/assigner', [IncidentController::class, 'assigner']);
+});
 
-    Route::middleware('role:ADMIN,TECHNICIEN')->group(function () {
+    Route::middleware('role:SUPER_ADMIN,ADMIN,TECHNICIEN')->group(function () {
         Route::post('/alertes/{alerte}/prendre', [AlerteController::class, 'prendre']);
         Route::post('/alertes/{alerte}/resoudre', [AlerteController::class, 'resoudre']);
         Route::post('/incidents/{incident}/prendre', [IncidentController::class, 'prendre']);

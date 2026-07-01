@@ -5,21 +5,22 @@
     "tagline": "Système intelligent de gestion de parc informatique"
   },
   "nav": {
-    "dashboard": "Tableau de bord",
-    "equipements": "Parc d'équipements",
-    "supervision": "Supervision",
-    "alertes": "Alertes",
-    "regles": "Règles d'alerte",
-    "incidents": "Incidents",
-    "predictions": "Prédictions",
-    "chatbot": "Assistant",
-    "administration": "Administration",
-    "sections": {
-      "exploitation": "Exploitation",
-      "intelligence": "Intelligence",
-      "systeme": "Système"
-    }
-  },
+  "dashboard": "Tableau de bord",
+  "equipements": "Parc d'équipements",
+  "supervision": "Supervision",
+  "alertes": "Alertes",
+  "regles": "Règles d'alerte",
+  "incidents": "Incidents",
+  "predictions": "Prédictions",
+  "chatbot": "Assistant",
+  "administration": "Administration",
+  "demandes": "Demandes d'inscription",
+  "sections": {
+    "exploitation": "Exploitation",
+    "intelligence": "Intelligence",
+    "systeme": "Système"
+  }
+},
   "auth": {
     "title": "Connexion",
     "subtitle": "Accédez à la console de supervision",
@@ -37,12 +38,16 @@
     "online": "En ligne",
     "lastUpdate": "Mise à jour",
     "noData": "Aucune donnée pour le moment",
-    "comingSoon": "Module en préparation"
+   "comingSoon": "Module en préparation",
+    "back": "Retour"
   },
   "incidents": {
     "title": "Incidents",
     "subtitle": "Signalement et résolution des pannes",
     "report": "Signaler un incident",
+    "reportHint": "Déclarer un nouvel incident sur votre équipement.",
+    "trackTitle": "Suivre mes incidents",
+    "trackHint": "Consulter l'état de vos incidents signalés.",
     "filterStatut": "Statut",
     "filterPriorite": "Priorité",
     "allStatuts": "Tous les statuts",
@@ -255,6 +260,8 @@
       "type": "Type",
       "marque": "Marque",
       "modele": "Modèle",
+      "numeroSerie": "Numéro de série",
+"affecteA": "Affecté à",
       "ip": "Adresse IP",
       "mac": "Adresse MAC",
       "etat": "État",

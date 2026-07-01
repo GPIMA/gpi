@@ -15,8 +15,8 @@ class Equipement extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nom', 'type', 'marque', 'modele', 'adresse_ip', 'adresse_mac',
-        'etat', 'localisation', 'date_acquisition', 'scan_reseau_id',
+        'nom', 'type', 'marque', 'modele', 'numero_serie', 'adresse_ip', 'adresse_mac',
+        'etat', 'localisation', 'date_acquisition', 'scan_reseau_id', 'technicien_id',
     ];
 
     protected function casts(): array
@@ -49,6 +49,11 @@ class Equipement extends Model
     public function scanReseau(): BelongsTo
     {
         return $this->belongsTo(ScanReseau::class);
+    }
+
+    public function technicien(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'technicien_id');
     }
 
     public function metriques(): HasMany

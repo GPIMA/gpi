@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RoleUtilisateur;
 use App\Http\Resources\PredictionResource;
 use App\Models\ModeleIA;
 use App\Models\Prediction;
@@ -16,11 +17,23 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
  */
 class PredictionController extends Controller
 {
-    /** Dernières prédictions, les plus probables en tête. */
+    /** Dernières prédictions, les plus probables en tête, scopées selon le rôle. */
     public function index(Request $request): AnonymousResourceCollection
     {
+        $user = $request->user();
+
         $predictions = Prediction::query()
             ->with(['equipement', 'modele'])
+            ->when($user->role === RoleUtilisateur::EMPLOYE, function ($q) use ($user) {
+                $q->whereHas('equipement.affectations', function ($sub) use ($user) {
+                    $sub->where('employe_id', $user->id)->where('statut', 'EN_COURS');
+                });
+            })
+            ->when($user->role === RoleUtilisateur::TECHNICIEN, function ($q) use ($user) {
+                $q->whereHas('equipement', function ($sub) use ($user) {
+                    $sub->where('technicien_id', $user->id);
+                });
+            })
             ->when($request->filled('equipement_id'), fn ($q) => $q->where('equipement_id', $request->integer('equipement_id')))
             ->orderByDesc('date_generation')
             ->orderByDesc('probabilite')

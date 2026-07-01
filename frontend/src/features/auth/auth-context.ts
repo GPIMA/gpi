@@ -4,7 +4,7 @@ import type { Utilisateur } from '@/lib/api/types'
 export interface AuthState {
   user: Utilisateur | null
   ready: boolean
-  login: (email: string, password: string) => Promise<void>
+  login: (email: string, password: string) => Promise<Utilisateur>
   logout: () => Promise<void>
 }
 

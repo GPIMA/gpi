@@ -64,5 +64,25 @@ export function useResoudreIncident() {
       qc.invalidateQueries({ queryKey: ['incidents'] })
       qc.invalidateQueries({ queryKey: ['notifications'] })
     },
+     })
+}
+    export function useTechniciens() {
+  return useQuery({
+    queryKey: ['utilisateurs', 'TECHNICIEN'],
+    queryFn: async () => {
+      const { data } = await api.get<Paginated<{ id: number; nomComplet: string }>>('/utilisateurs', {
+        params: { role: 'TECHNICIEN', per_page: 200 },
+      })
+      return data.data
+    },
+  })
+}
+
+export function useAssignerIncident() {
+  const invalidate = useInvalidate()
+  return useMutation({
+    mutationFn: async ({ id, technicienId }: { id: number; technicienId: number }) =>
+      (await api.post(`/incidents/${id}/assigner`, { technicien_id: technicienId })).data,
+    onSuccess: invalidate,
   })
 }

@@ -19,11 +19,13 @@ class UpdateEquipementRequest extends StoreEquipementRequest
             'type' => ['sometimes', 'required', new Enum(TypeEquipement::class)],
             'marque' => ['nullable', 'string', 'max:120'],
             'modele' => ['nullable', 'string', 'max:120'],
+            'numeroSerie' => ['nullable', 'string', 'max:120'],
             'adresseIP' => ['nullable', 'ip'],
             'adresseMAC' => ['nullable', 'string', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$/'],
             'etat' => ['sometimes', 'required', new Enum(EtatEquipement::class)],
             'localisation' => ['nullable', 'string', 'max:160'],
             'dateAcquisition' => ['nullable', 'date'],
+            'employeId' => ['nullable', 'integer', 'exists:users,id'],
         ];
     }
 

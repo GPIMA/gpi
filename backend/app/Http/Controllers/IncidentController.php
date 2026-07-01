@@ -11,10 +11,11 @@ use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class IncidentController extends Controller
 {
-    /** Les employés ne voient que leurs incidents ; techniciens/admins voient tout. */
+    /** Les employés ne voient que leurs incidents ; techniciens voient ceux qui leur sont assignés ; admins voient tout. */
     public function index(Request $request): AnonymousResourceCollection
     {
         $user = $request->user();
@@ -22,6 +23,7 @@ class IncidentController extends Controller
         $incidents = Incident::query()
             ->with(['equipement', 'employe', 'technicien'])
             ->when($user->estEmploye(), fn ($q) => $q->where('employe_id', $user->id))
+            ->when($user->estTechnicien(), fn ($q) => $q->where('technicien_id', $user->id))
             ->when($request->filled('statut'), fn ($q) => $q->where('statut', $request->string('statut')))
             ->when($request->filled('priorite'), fn ($q) => $q->where('priorite', $request->string('priorite')))
             ->orderByRaw("CASE statut WHEN 'OUVERT' THEN 0 WHEN 'EN_COURS' THEN 1 WHEN 'RESOLU' THEN 2 ELSE 3 END")
@@ -53,8 +55,18 @@ class IncidentController extends Controller
             ->setStatusCode(201);
     }
 
-    public function show(Incident $incident): IncidentResource
+    public function show(Request $request, Incident $incident): IncidentResource
     {
+        $user = $request->user();
+
+        if ($user->estEmploye() && $incident->employe_id !== $user->id) {
+            throw new AccessDeniedHttpException(__('messages.forbidden'));
+        }
+
+        if ($user->estTechnicien() && $incident->technicien_id !== $user->id) {
+            throw new AccessDeniedHttpException(__('messages.forbidden'));
+        }
+
         return new IncidentResource($incident->load(['equipement', 'employe', 'technicien']));
     }
 
@@ -87,4 +99,20 @@ class IncidentController extends Controller
             ->additional(['message' => __('messages.incident.resolu')])
             ->response();
     }
+    /** Assignation d'un technicien par l'admin. */
+public function assigner(Request $request, Incident $incident): JsonResponse
+{
+    $data = $request->validate([
+        'technicien_id' => ['required', 'integer', 'exists:users,id'],
+    ]);
+
+    $incident->update([
+        'technicien_id' => $data['technicien_id'],
+        'statut' => StatutIncident::EN_COURS,
+    ]);
+
+    return (new IncidentResource($incident->load(['equipement', 'employe', 'technicien'])))
+        ->additional(['message' => 'Incident assigné.'])
+        ->response();
+}
 }

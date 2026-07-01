@@ -21,9 +21,9 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     titleKey: 'exploitation',
     items: [
-      { to: '/dashboard', key: 'dashboard', icon: 'dashboard' },
+      { to: '/dashboard', key: 'dashboard', icon: 'dashboard', roles: ['SUPER_ADMIN', 'ADMIN'] },
       { to: '/equipements', key: 'equipements', icon: 'equipements' },
-      { to: '/supervision', key: 'supervision', icon: 'supervision' },
+      { to: '/supervision', key: 'supervision', icon: 'supervision', roles: ['SUPER_ADMIN', 'ADMIN', 'TECHNICIEN'] },
       { to: '/alertes', key: 'alertes', icon: 'alertes' },
       { to: '/incidents', key: 'incidents', icon: 'incidents' },
     ],
@@ -38,8 +38,9 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     titleKey: 'systeme',
     items: [
-      { to: '/regles', key: 'regles', icon: 'regles', roles: ['ADMIN'] },
-      { to: '/administration', key: 'administration', icon: 'administration', roles: ['ADMIN'] },
+      { to: '/regles', key: 'regles', icon: 'regles', roles: ['SUPER_ADMIN', 'ADMIN'] },
+     { to: '/administration', key: 'administration', icon: 'administration', roles: ['SUPER_ADMIN', 'ADMIN', 'TECHNICIEN'] },
+   { to: '/demandes-inscription', key: 'demandes', icon: 'administration', roles: ['SUPER_ADMIN', 'ADMIN'] },
     ],
   },
 ]

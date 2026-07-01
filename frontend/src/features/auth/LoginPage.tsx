@@ -20,8 +20,9 @@ export function LoginPage() {
     setError(null)
     setBusy(true)
     try {
-      await login(email, password)
-      navigate('/dashboard', { replace: true })
+     const utilisateur = await login(email, password)
+const role = utilisateur.role
+navigate(role === 'TECHNICIEN' || role === 'EMPLOYE' ? '/equipements' : '/dashboard', { replace: true })
     } catch (err) {
       const apiMessage = isAxiosError(err)
         ? (err.response?.data?.errors?.email?.[0] ?? err.response?.data?.message)
@@ -50,7 +51,7 @@ export function LoginPage() {
 
       <header className="relative z-10 mx-auto flex w-[min(1180px,calc(100%-28px))] items-center justify-between gap-4 px-4 py-5 sm:px-6">
         <a
-          href="/vitrine/"
+          href="/vitrine/index.html"
           className="inline-flex items-center gap-3 rounded-full bg-white/85 px-4 py-3 shadow-[0_14px_34px_rgba(7,59,103,.12)] ring-1 ring-[#d8e5ee] backdrop-blur"
         >
           <img src="/vitrine/assets/gpi-logo.svg" alt="Logo GPI" className="h-10 w-auto" />
@@ -61,7 +62,7 @@ export function LoginPage() {
 
         <div className="flex items-center gap-3">
           <a
-            href="/vitrine/"
+            href="/vitrine/index.html"
             className="hidden rounded-full bg-white px-4 py-2 text-sm font-black text-[#073b67] shadow-sm ring-1 ring-[#d8e5ee] transition hover:-translate-y-0.5 hover:bg-[#dff2fb] sm:inline-flex"
           >
             Retour vitrine
@@ -168,7 +169,7 @@ export function LoginPage() {
               Vous n’avez pas encore de compte ?
             </p>
             <a
-              href="/vitrine/#contact"
+              href="/vitrine/index.html#contact"
               className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-[#073b67] bg-white px-5 py-3 text-sm font-black text-[#073b67] transition hover:bg-[#dff2fb]"
             >
               Demander une inscription

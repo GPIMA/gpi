@@ -15,11 +15,13 @@ export interface EquipementInput {
   type: string
   marque?: string | null
   modele?: string | null
+  numeroSerie?: string | null
   adresseIP?: string | null
   adresseMAC?: string | null
   etat: string
   localisation?: string | null
   dateAcquisition?: string | null
+  employeId?: number | null
 }
 
 export function useEquipements(filters: EquipementFilters) {
@@ -78,5 +80,21 @@ export function useScanReseau() {
     mutationFn: async () =>
       (await api.post<{ message: string; scan: { nbDetectes: number } }>('/scan-reseau', {})).data,
     onSuccess: invalidate,
+  })
+}
+export interface EmployeOption {
+  id: number
+  nomComplet: string
+}
+
+export function useEmployes() {
+  return useQuery({
+    queryKey: ['utilisateurs', 'EMPLOYE'],
+    queryFn: async () => {
+      const { data } = await api.get<Paginated<EmployeOption>>('/utilisateurs', {
+        params: { role: 'EMPLOYE', per_page: 200 },
+      })
+      return data.data
+    },
   })
 }

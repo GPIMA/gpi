@@ -21,18 +21,22 @@ class StoreEquipementRequest extends FormRequest
             'type' => ['required', new Enum(TypeEquipement::class)],
             'marque' => ['nullable', 'string', 'max:120'],
             'modele' => ['nullable', 'string', 'max:120'],
+            'numeroSerie' => ['nullable', 'string', 'max:120'],
             'adresseIP' => ['nullable', 'ip'],
             'adresseMAC' => ['nullable', 'string', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$/'],
             'etat' => ['required', new Enum(EtatEquipement::class)],
             'localisation' => ['nullable', 'string', 'max:160'],
             'dateAcquisition' => ['nullable', 'date'],
+            'employeId' => ['nullable', 'integer', 'exists:users,id'],
         ];
     }
 
     /**
      * Map the API's camelCase payload to the model's snake_case columns.
      * Only the keys actually present are returned, so the same method serves
-     * full creates and partial updates.
+     * full creates and partial updates. employeId is excluded here since it
+     * is not a column on equipements — it is handled separately in the
+     * controller to create/update an Affectation record.
      */
     public function donnees(): array
     {
@@ -41,6 +45,7 @@ class StoreEquipementRequest extends FormRequest
             'type' => 'type',
             'marque' => 'marque',
             'modele' => 'modele',
+            'numeroSerie' => 'numero_serie',
             'adresseIP' => 'adresse_ip',
             'adresseMAC' => 'adresse_mac',
             'etat' => 'etat',

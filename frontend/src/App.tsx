@@ -16,6 +16,7 @@ const PredictionsPage = lazy(() => import('@/features/predictions/PredictionsPag
 const AssistantPage = lazy(() => import('@/features/assistant/AssistantPage').then((m) => ({ default: m.AssistantPage })))
 const ReglesPage = lazy(() => import('@/features/regles/ReglesPage').then((m) => ({ default: m.ReglesPage })))
 const AdministrationPage = lazy(() => import('@/features/administration/AdministrationPage').then((m) => ({ default: m.AdministrationPage })))
+const DemandesInscriptionPage = lazy(() => import('@/features/administration/DemandesInscriptionPage').then((m) => ({ default: m.DemandesInscriptionPage })))
 
 export default function App() {
   return (
@@ -23,7 +24,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<VitrineRedirect />} />
         <Route path="/login" element={<LoginPage />} />
-
+<Route path="demandes-inscription" element={<DemandesInscriptionPage />} />
         <Route
           element={
             <RequireAuth>

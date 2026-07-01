@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\EtatAlerte;
+use App\Enums\RoleUtilisateur;
 use App\Http\Resources\AlerteResource;
 use App\Models\Alerte;
 use Illuminate\Http\JsonResponse;
@@ -11,11 +12,18 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class AlerteController extends Controller
 {
-    /** Liste filtrable (état, sévérité, équipement) triée par urgence. */
+    /** Liste filtrable (état, sévérité, équipement) triée par urgence, scopée selon le rôle. */
     public function index(Request $request): AnonymousResourceCollection
     {
+        $user = $request->user();
+
         $alertes = Alerte::query()
             ->with(['equipement', 'regle'])
+           ->when($user->role === RoleUtilisateur::EMPLOYE, function ($q) use ($user) {
+    $q->whereHas('equipement.affectations', function ($sub) use ($user) {
+        $sub->where('employe_id', $user->id)->where('statut', 'EN_COURS');
+    });
+})
             ->when($request->filled('etat'), fn ($q) => $q->where('etat', $request->string('etat')))
             ->when($request->filled('severite'), fn ($q) => $q->where('severite', $request->string('severite')))
             ->when($request->filled('equipement_id'), fn ($q) => $q->where('equipement_id', $request->integer('equipement_id')))

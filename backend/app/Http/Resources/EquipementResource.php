@@ -12,6 +12,9 @@ class EquipementResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+       $affectationActive = $this->relationLoaded('affectationActive')
+    ? $this->affectationActive->first()
+    : null;
         return [
             'id' => $this->id,
             'nom' => $this->nom,
@@ -19,19 +22,22 @@ class EquipementResource extends JsonResource
             'typeLabel' => $this->type->label(),
             'marque' => $this->marque,
             'modele' => $this->modele,
+            'numeroSerie' => $this->numero_serie,
             'adresseIP' => $this->adresse_ip,
             'adresseMAC' => $this->adresse_mac,
             'etat' => $this->etat->value,
             'etatLabel' => $this->etat->label(),
             'localisation' => $this->localisation,
             'dateAcquisition' => $this->date_acquisition?->toDateString(),
-            'affectation' => $this->whenLoaded('affectationActive', function () {
-                $active = $this->affectationActive->first();
-
-                return $active && $active->relationLoaded('employe') && $active->employe
-                    ? ['id' => $active->id, 'employe' => $active->employe->nomComplet()]
-                    : null;
-            }),
+            'affectation' => $this->whenLoaded('affectationActive', function () use ($affectationActive) {
+    return $affectationActive && $affectationActive->employe
+        ? [
+            'id' => $affectationActive->id,
+            'employeId' => $affectationActive->employe_id,
+            'employe' => $affectationActive->employe->nomComplet(),
+        ]
+        : null;
+}),
             'dateCreation' => $this->created_at,
         ];
     }

@@ -25,11 +25,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  const login = useCallback(async (email: string, password: string) => {
-    const res = await api.post<LoginResponse>('/login', { email, password })
-    tokenStore.set(res.data.token)
-    setUser(res.data.utilisateur)
-  }, [])
+  const login = useCallback(async (email: string, password: string): Promise<Utilisateur> => {
+  const res = await api.post<LoginResponse>('/login', { email, password })
+  tokenStore.set(res.data.token)
+  setUser(res.data.utilisateur)
+  return res.data.utilisateur
+}, [])
 
   const logout = useCallback(async () => {
     try {

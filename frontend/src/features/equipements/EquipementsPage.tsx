@@ -13,7 +13,7 @@ import { EquipementForm } from './EquipementForm'
 export function EquipementsPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
-  const isAdmin = user?.role === 'ADMIN'
+  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN'
   const { data: enums } = useEnums()
 
   const [filters, setFilters] = useState<EquipementFilters>({ page: 1 })

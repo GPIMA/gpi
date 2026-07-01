@@ -45,9 +45,20 @@ class User extends Authenticatable
 
     // — Rôles —————————————————————————————————————————————————
 
+    public function estSuperAdmin(): bool
+    {
+        return $this->role === RoleUtilisateur::SUPER_ADMIN;
+    }
+
     public function estAdministrateur(): bool
     {
         return $this->role === RoleUtilisateur::ADMIN;
+    }
+
+   /** Admin ou Super Admin — pratique pour les contrôles d'accès. */
+    public function estAdminOuPlus(): bool
+    {
+        return in_array($this->role, [RoleUtilisateur::SUPER_ADMIN, RoleUtilisateur::ADMIN], true);
     }
 
     public function estTechnicien(): bool
@@ -79,10 +90,16 @@ class User extends Authenticatable
         return $this->hasMany(Incident::class, 'technicien_id');
     }
 
-    /** Affectations d'équipements (employé). */
+   /** Affectations d'équipements (employé). */
     public function affectations(): HasMany
     {
         return $this->hasMany(Affectation::class, 'employe_id');
+    }
+
+    /** Équipements assignés à ce technicien pour la supervision/alertes. */
+    public function equipementsAssignes(): HasMany
+    {
+        return $this->hasMany(Equipement::class, 'technicien_id');
     }
 
     public function conversations(): HasMany

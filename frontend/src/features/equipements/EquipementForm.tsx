@@ -4,7 +4,7 @@ import { isAxiosError } from 'axios'
 import { Modal } from '@/components/Modal'
 import { useEnums } from '@/lib/api/enums'
 import type { Equipement } from '@/lib/api/types'
-import { useCreateEquipement, useUpdateEquipement, type EquipementInput } from './api'
+import { useCreateEquipement, useUpdateEquipement, useEmployes, type EquipementInput } from './api'
 
 type Errors = Record<string, string[]>
 
@@ -14,11 +14,13 @@ function emptyForm(): EquipementInput {
     type: '',
     marque: '',
     modele: '',
+    numeroSerie: '',
     adresseIP: '',
     adresseMAC: '',
     etat: '',
     localisation: '',
     dateAcquisition: '',
+    employeId: null,
   }
 }
 
@@ -28,11 +30,13 @@ function fromEquipement(e: Equipement): EquipementInput {
     type: e.type,
     marque: e.marque ?? '',
     modele: e.modele ?? '',
+    numeroSerie: e.numeroSerie ?? '',
     adresseIP: e.adresseIP ?? '',
     adresseMAC: e.adresseMAC ?? '',
     etat: e.etat,
     localisation: e.localisation ?? '',
     dateAcquisition: e.dateAcquisition ?? '',
+    employeId: e.affectation?.employeId ?? null,
   }
 }
 
@@ -47,6 +51,7 @@ export function EquipementForm({
 }) {
   const { t } = useTranslation()
   const { data: enums } = useEnums()
+  const { data: employes } = useEmployes()
   const isEdit = !!equipement
 
   const [form, setForm] = useState<EquipementInput>(
@@ -66,8 +71,10 @@ export function EquipementForm({
     e.preventDefault()
     setErrors({})
     // Strip empty strings so optional fields are sent as null/omitted.
+    // employeId is kept even when null, so the backend can clear an
+    // existing affectation when the dropdown is reset to "—".
     const payload = Object.fromEntries(
-      Object.entries(form).filter(([, v]) => v !== ''),
+      Object.entries(form).filter(([key, v]) => key === 'employeId' || v !== ''),
     ) as EquipementInput
     try {
       if (isEdit) await update.mutateAsync(payload)
@@ -118,6 +125,23 @@ export function EquipementForm({
 
         <Field label={t('equipements.form.modele')} error={err('modele')}>
           <input className="input" value={form.modele ?? ''} onChange={(e) => set('modele', e.target.value)} />
+        </Field>
+
+        <Field label={t('equipements.form.numeroSerie')} error={err('numeroSerie')}>
+          <input className="input mono" value={form.numeroSerie ?? ''} onChange={(e) => set('numeroSerie', e.target.value)} />
+        </Field>
+
+        <Field label={t('equipements.form.affecteA')} error={err('employeId')}>
+          <select
+            className="input"
+            value={form.employeId ?? ''}
+            onChange={(e) => set('employeId', e.target.value ? Number(e.target.value) : null)}
+          >
+            <option value="">—</option>
+            {employes?.map((emp) => (
+              <option key={emp.id} value={emp.id}>{emp.nomComplet}</option>
+            ))}
+          </select>
         </Field>
 
         <Field label={t('equipements.form.ip')} error={err('adresseIP')}>

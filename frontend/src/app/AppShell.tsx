@@ -63,7 +63,7 @@ export function AppShell() {
 
         <div className="border-t border-[var(--color-line)] p-4">
           <a
-            href="/vitrine/"
+            href="/vitrine/index.html"
             className="mb-3 flex items-center justify-center rounded-full border border-[var(--color-line)] bg-[var(--color-raised)] px-4 py-2 text-xs font-black uppercase tracking-[0.08em] text-[var(--color-brand)] transition hover:bg-[var(--color-overlay)]"
           >
             Voir la vitrine

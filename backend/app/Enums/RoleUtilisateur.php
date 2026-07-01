@@ -2,17 +2,29 @@
 
 namespace App\Enums;
 
-use App\Enums\Concerns\HasOptions;
-
-/**
- * Discriminator for the abstract Utilisateur hierarchy of the class diagram
- * (Administrateur / Technicien / Employe), mapped onto a single users table.
- */
 enum RoleUtilisateur: string
 {
-    use HasOptions;
-
+    case SUPER_ADMIN = 'SUPER_ADMIN';
     case ADMIN = 'ADMIN';
     case TECHNICIEN = 'TECHNICIEN';
     case EMPLOYE = 'EMPLOYE';
+
+    public function label(): string
+    {
+        return match($this) {
+            self::SUPER_ADMIN => 'Super Administrateur',
+            self::ADMIN => 'Administrateur',
+            self::TECHNICIEN => 'Technicien',
+            self::EMPLOYE => 'Employé',
+        };
+    }
+
+    /** Liste des options [value, label] pour les selects / l'endpoint /enums. */
+    public static function options(): array
+    {
+        return array_map(
+            fn (self $case) => ['value' => $case->value, 'label' => $case->label()],
+            self::cases()
+        );
+    }
 }
