@@ -16,7 +16,7 @@ class Equipement extends Model
 
     protected $fillable = [
         'nom', 'type', 'marque', 'modele', 'numero_serie', 'adresse_ip', 'adresse_mac',
-        'etat', 'localisation', 'date_acquisition', 'scan_reseau_id', 'technicien_id',
+        'etat', 'localisation', 'date_acquisition', 'technicien_id',
     ];
 
     protected function casts(): array
@@ -46,25 +46,15 @@ class Equipement extends Model
         return $this->affectations()->where('statut', 'EN_COURS');
     }
 
-    public function scanReseau(): BelongsTo
-    {
-        return $this->belongsTo(ScanReseau::class);
-    }
-
     public function technicien(): BelongsTo
     {
         return $this->belongsTo(User::class, 'technicien_id');
     }
 
+    /** Relevés de métriques (alimentent le moteur d'évaluation des règles d'alerte). */
     public function metriques(): HasMany
     {
         return $this->hasMany(Metrique::class);
-    }
-
-    /** Les n derniers relevés, du plus récent au plus ancien. */
-    public function dernieresMetriques(int $n = 30): HasMany
-    {
-        return $this->metriques()->latest('date_heure')->limit($n);
     }
 
     public function alertes(): HasMany
@@ -75,5 +65,17 @@ class Equipement extends Model
     public function predictions(): HasMany
     {
         return $this->hasMany(Prediction::class);
+    }
+
+    /** Toutes les demandes de changement d'état soumises pour cet équipement. */
+    public function demandesChangementEtat(): HasMany
+    {
+        return $this->hasMany(DemandeChangementEtat::class);
+    }
+
+    /** La demande de changement d'état encore en attente d'approbation, s'il y en a une. */
+    public function demandeChangementEtatEnAttente(): HasMany
+    {
+        return $this->demandesChangementEtat()->where('statut', 'EN_ATTENTE');
     }
 }

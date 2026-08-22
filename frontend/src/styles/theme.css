@@ -238,7 +238,11 @@
     background: #fff;
     box-shadow: 0 0 0 4px rgba(101, 174, 220, 0.18);
   }
-
+.input:disabled {
+  background: var(--color-overlay);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
   .app-canvas {
     background-color: var(--color-base);
     background-image:

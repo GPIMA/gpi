@@ -65,7 +65,6 @@ class UserFactory extends Factory
         return $this->state(fn () => [
             'role' => RoleUtilisateur::TECHNICIEN,
             'departement' => null,
-            'specialite' => fake()->randomElement(['Réseau', 'Systèmes', 'Support', 'Sécurité']),
         ]);
     }
 

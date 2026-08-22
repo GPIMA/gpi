@@ -30,7 +30,6 @@ class FixedDemoUsersSeeder extends Seeder
                 'prenom' => $account['prenom'],
                 'password' => Hash::make($account['password']),
                 'role' => $role,
-                'specialite' => $account['specialite'] ?? null,
                 'departement' => $account['departement'] ?? null,
             ],
         );

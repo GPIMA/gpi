@@ -17,8 +17,18 @@ const SIGNAL: Record<string, string> = {
   EN_COURS: 'var(--color-warn)',
   RESOLUE: 'var(--color-online)',
   OUVERT: 'var(--color-down)',
+  EN_MAINTENANCE: 'var(--color-warn)',
   RESOLU: 'var(--color-online)',
   FERME: 'var(--color-idle)',
+  // RoleUtilisateur — utilisé pour signaler qu'un incident concerne un
+  // membre du staff plutôt qu'un simple employé.
+  TECHNICIEN: 'var(--color-brand-dim)',
+  ADMIN: 'var(--color-brand-dim)',
+  SUPER_ADMIN: 'var(--color-brand-dim)',
+  // StatutDemandeChangementEtat / DemandeInscription
+  EN_ATTENTE: 'var(--color-warn)',
+  APPROUVEE: 'var(--color-online)',
+  REJETEE: 'var(--color-down)',
 }
 
 export function StatusPill({ value, label }: { value: string; label: string }) {

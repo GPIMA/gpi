@@ -30,7 +30,6 @@ return [
             'password' => env('DEMO_TECHNICIEN_PASSWORD', 'password'),
             'nom' => env('DEMO_TECHNICIEN_NOM', 'Technicien'),
             'prenom' => env('DEMO_TECHNICIEN_PRENOM', 'Demo'),
-            'specialite' => env('DEMO_TECHNICIEN_SPECIALITE', 'Support IT'),
         ],
     ],
 
@@ -43,12 +42,6 @@ return [
     'supervision' => [
         'intervalle_minutes' => env('SUPERVISION_INTERVALLE', 5),
         'historique_jours' => env('SUPERVISION_HISTORIQUE_JOURS', 7),
-    ],
-
-    'scan' => [
-        'plage_par_defaut' => env('SCAN_PLAGE', '192.168.1.0/24'),
-        'min_equipements' => env('SCAN_MIN', 2),
-        'max_equipements' => env('SCAN_MAX', 6),
     ],
 
     'prediction' => [

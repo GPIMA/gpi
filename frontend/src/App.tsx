@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import { AppShell } from '@/app/AppShell'
 import { RequireAuth } from '@/app/RequireAuth'
+import { RequireRole } from '@/app/RequireRole'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { LoginPage } from '@/features/auth/LoginPage'
 
@@ -9,7 +10,6 @@ import { LoginPage } from '@/features/auth/LoginPage'
 // (charts) load on demand.
 const DashboardPage = lazy(() => import('@/features/dashboard/DashboardPage').then((m) => ({ default: m.DashboardPage })))
 const EquipementsPage = lazy(() => import('@/features/equipements/EquipementsPage').then((m) => ({ default: m.EquipementsPage })))
-const SupervisionPage = lazy(() => import('@/features/supervision/SupervisionPage').then((m) => ({ default: m.SupervisionPage })))
 const AlertesPage = lazy(() => import('@/features/alertes/AlertesPage').then((m) => ({ default: m.AlertesPage })))
 const IncidentsPage = lazy(() => import('@/features/incidents/IncidentsPage').then((m) => ({ default: m.IncidentsPage })))
 const PredictionsPage = lazy(() => import('@/features/predictions/PredictionsPage').then((m) => ({ default: m.PredictionsPage })))
@@ -17,6 +17,7 @@ const AssistantPage = lazy(() => import('@/features/assistant/AssistantPage').th
 const ReglesPage = lazy(() => import('@/features/regles/ReglesPage').then((m) => ({ default: m.ReglesPage })))
 const AdministrationPage = lazy(() => import('@/features/administration/AdministrationPage').then((m) => ({ default: m.AdministrationPage })))
 const DemandesInscriptionPage = lazy(() => import('@/features/administration/DemandesInscriptionPage').then((m) => ({ default: m.DemandesInscriptionPage })))
+const DemandesChangementEtatPage = lazy(() => import('@/features/demandesChangementEtat/DemandesChangementEtatPage').then((m) => ({ default: m.DemandesChangementEtatPage })))
 
 export default function App() {
   return (
@@ -24,7 +25,6 @@ export default function App() {
       <Routes>
         <Route path="/" element={<VitrineRedirect />} />
         <Route path="/login" element={<LoginPage />} />
-<Route path="demandes-inscription" element={<DemandesInscriptionPage />} />
         <Route
           element={
             <RequireAuth>
@@ -43,13 +43,28 @@ export default function App() {
           >
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="equipements" element={<EquipementsPage />} />
-            <Route path="supervision" element={<SupervisionPage />} />
             <Route path="alertes" element={<AlertesPage />} />
             <Route path="incidents" element={<IncidentsPage />} />
             <Route path="predictions" element={<PredictionsPage />} />
             <Route path="assistant" element={<AssistantPage />} />
             <Route path="regles" element={<ReglesPage />} />
             <Route path="administration" element={<AdministrationPage />} />
+            <Route
+              path="demandes-inscription"
+              element={
+                <RequireRole roles={['SUPER_ADMIN', 'ADMIN']}>
+                  <DemandesInscriptionPage />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="demandes-changement-etat"
+              element={
+                <RequireRole roles={['SUPER_ADMIN', 'ADMIN', 'TECHNICIEN']}>
+                  <DemandesChangementEtatPage />
+                </RequireRole>
+              }
+            />
           </Route>
         </Route>
 

@@ -15,6 +15,9 @@ class EquipementResource extends JsonResource
        $affectationActive = $this->relationLoaded('affectationActive')
     ? $this->affectationActive->first()
     : null;
+       $demandeEnAttente = $this->relationLoaded('demandeChangementEtatEnAttente')
+    ? $this->demandeChangementEtatEnAttente->first()
+    : null;
         return [
             'id' => $this->id,
             'nom' => $this->nom,
@@ -38,6 +41,14 @@ class EquipementResource extends JsonResource
         ]
         : null;
 }),
+            'demandeChangementEtatEnAttente' => $demandeEnAttente ? [
+                'id' => $demandeEnAttente->id,
+                'etatActuel' => $demandeEnAttente->etat_actuel->value,
+                'etatActuelLabel' => $demandeEnAttente->etat_actuel->label(),
+                'etatDemande' => $demandeEnAttente->etat_demande->value,
+                'etatDemandeLabel' => $demandeEnAttente->etat_demande->label(),
+                'createdAt' => $demandeEnAttente->created_at,
+            ] : null,
             'dateCreation' => $this->created_at,
         ];
     }

@@ -11,5 +11,5 @@ enum EtatEquipement: string
     case EN_LIGNE = 'EN_LIGNE';
     case HORS_LIGNE = 'HORS_LIGNE';
     case EN_PANNE = 'EN_PANNE';
-    case MAINTENANCE = 'MAINTENANCE';
+    case EN_MAINTENANCE = 'EN_MAINTENANCE';
 }

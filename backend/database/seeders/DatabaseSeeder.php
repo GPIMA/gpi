@@ -47,6 +47,11 @@ class DatabaseSeeder extends Seeder
         // A demo fleet.
         $equipements = Equipement::factory()->count(24)->create();
 
+        // A few named peripherals so the SOURIS/CLAVIER/ECRAN/SOCLE types
+        // have guaranteed, easy-to-find examples to test (the factory only
+        // includes them by random chance among the 24 above).
+        $this->call(PeripheriquesDemoSeeder::class);
+
         // Assign workstations to employees (active affectations).
         $equipements
             ->where('type', \App\Enums\TypeEquipement::PC)

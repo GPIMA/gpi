@@ -20,6 +20,10 @@ class EquipementFactory extends Factory
         'IMPRIMANTE' => [['HP', 'LaserJet M428'], ['Canon', 'i-SENSYS']],
         'ROUTEUR' => [['Cisco', 'ISR 4331'], ['MikroTik', 'CCR2004']],
         'SWITCH' => [['Cisco', 'Catalyst 9200'], ['Aruba', '2930F']],
+        'SOURIS' => [['Logitech', 'MX Master 3'], ['HP', '125']],
+        'CLAVIER' => [['Logitech', 'MX Keys'], ['HP', 'K120']],
+        'ECRAN' => [['Dell', 'P2422H'], ['HP', 'E24 G5']],
+        'SOCLE' => [['Dell', 'WD19S'], ['HP', 'USB-C Dock G5']],
     ];
 
     public function definition(): array

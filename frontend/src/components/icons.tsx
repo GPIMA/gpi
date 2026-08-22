@@ -34,9 +34,6 @@ export const Icons = {
     <rect x="3" y="4" width="18" height="12" rx="1.5" />
     <path d="M8 20h8M12 16v4" />
   </>),
-  supervision: svg(<>
-    <path d="M3 12h4l2 6 4-14 2 8h6" />
-  </>),
   alertes: svg(<>
     <path d="M12 4l9 16H3z" />
     <path d="M12 10v4M12 17.5v.5" />
@@ -78,9 +75,9 @@ export const Icons = {
   trash: svg(<>
     <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" />
   </>),
-  scan: svg(<>
-    <path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3" />
-    <path d="M4 12h16" />
+  history: svg(<>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 7v5l3.5 2" />
   </>),
   chevronLeft: svg(<path d="M15 6l-6 6 6 6" />),
   chevronRight: svg(<path d="M9 6l6 6-6 6" />),
@@ -90,6 +87,11 @@ export const Icons = {
   </>),
   check: svg(<path d="M5 12l5 5L20 6" />),
   send: svg(<path d="M4 12l16-7-7 16-2-7-7-2z" />),
+  assign: svg(<>
+    <circle cx="9" cy="8" r="3.2" />
+    <path d="M3.5 20a5.7 5.7 0 0 1 11 0" />
+    <path d="M16 11l2 2 3.5-3.5" />
+  </>),
 }
 
 export type IconName = keyof typeof Icons

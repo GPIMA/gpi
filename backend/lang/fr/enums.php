@@ -8,6 +8,10 @@ return [
         'IMPRIMANTE' => 'Imprimante',
         'ROUTEUR' => 'Routeur',
         'SWITCH' => 'Commutateur',
+        'SOURIS' => 'Souris',
+        'CLAVIER' => 'Clavier',
+        'ECRAN' => 'Écran',
+        'SOCLE' => 'Socle',
     ],
 
     'etat_equipement' => [
@@ -15,6 +19,7 @@ return [
         'HORS_LIGNE' => 'Hors ligne',
         'EN_PANNE' => 'En panne',
         'MAINTENANCE' => 'En maintenance',
+        'EN_MAINTENANCE' => 'En maintenance',
     ],
 
     'type_alerte' => [
@@ -47,8 +52,15 @@ return [
     'statut_incident' => [
         'OUVERT' => 'Ouvert',
         'EN_COURS' => 'En cours',
+        'EN_MAINTENANCE' => 'En maintenance',
         'RESOLU' => 'Résolu',
         'FERME' => 'Fermé',
+    ],
+
+    'motif_retour_poste' => [
+        'MAINTENANCE_SUR_PLACE' => 'La maintenance va s\'effectuer sur le champ',
+        'NOUVELLE_DATE' => 'La maintenance va prendre plus de temps, nouvelle date de restitution',
+        'POSTE_REMPLACE' => 'Le poste est endommagé, un nouveau poste est attribué',
     ],
 
     'expediteur_type' => [
@@ -60,6 +72,12 @@ return [
         'ADMIN' => 'Administrateur',
         'TECHNICIEN' => 'Technicien',
         'EMPLOYE' => 'Employé',
+    ],
+
+    'statut_demande_changement_etat' => [
+        'EN_ATTENTE' => 'En attente',
+        'APPROUVEE' => 'Approuvée',
+        'REJETEE' => 'Rejetée',
     ],
 
 ];

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from '@/features/auth/auth-context'
 import { useEnums } from '@/lib/api/enums'
 import type { Utilisateur } from '@/lib/api/types'
 import { PageHeader } from '@/components/PageHeader'
@@ -7,9 +8,12 @@ import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { Icons } from '@/components/icons'
 import { useDeleteUtilisateur, useUtilisateurs, type UtilisateurFilters } from './api'
 import { UtilisateurForm } from './UtilisateurForm'
+import { HistoriqueModal } from './HistoriqueModal'
 
 export function AdministrationPage() {
   const { t } = useTranslation()
+  const { user } = useAuth()
+  const isAdmin = user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN'
   const { data: enums } = useEnums()
 
   const [filters, setFilters] = useState<UtilisateurFilters>({ page: 1 })
@@ -19,6 +23,7 @@ export function AdministrationPage() {
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState<Utilisateur | null>(null)
   const [toDelete, setToDelete] = useState<Utilisateur | null>(null)
+  const [historiqueUser, setHistoriqueUser] = useState<Utilisateur | null>(null)
   const del = useDeleteUtilisateur()
 
   useEffect(() => {
@@ -36,10 +41,12 @@ export function AdministrationPage() {
         title={t('administration.title')}
         subtitle={t('administration.subtitle')}
         actions={
-          <button className="btn btn-primary" onClick={() => { setEditing(null); setFormOpen(true) }}>
-            <Icons.plus size={16} />
-            {t('administration.add')}
-          </button>
+          isAdmin && (
+            <button className="btn btn-primary" onClick={() => { setEditing(null); setFormOpen(true) }}>
+              <Icons.plus size={16} />
+              {t('administration.add')}
+            </button>
+          )
         }
       />
 
@@ -55,6 +62,12 @@ export function AdministrationPage() {
             <option value="">{t('administration.allRoles')}</option>
             {enums?.roleUtilisateur.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
+         <select className="input w-auto" value={filters.localisation ?? ''} onChange={(e) => setFilters((f) => ({ ...f, localisation: e.target.value, page: 1 }))}>
+  <option value="">Toutes les localisations</option>
+  <option value="Rabat">Rabat</option>
+  <option value="Casablanca">Casablanca</option>
+  <option value="Tanger">Tanger</option>
+</select>
         </div>
 
         <div className="overflow-x-auto">
@@ -65,6 +78,7 @@ export function AdministrationPage() {
                 <th>{t('administration.cols.email')}</th>
                 <th>{t('administration.cols.role')}</th>
                 <th>{t('administration.cols.detail')}</th>
+                <th>{t('administration.cols.poste')}</th>
                 <th className="text-right">{t('administration.cols.actions')}</th>
               </tr>
             </thead>
@@ -74,24 +88,32 @@ export function AdministrationPage() {
                   <td className="font-medium">{u.nomComplet}</td>
                   <td className="mono text-[var(--color-muted)]">{u.email}</td>
                   <td className="text-[var(--color-muted)]">{u.roleLabel}</td>
-                  <td className="text-[var(--color-muted)]">{u.specialite ?? u.departement ?? '—'}</td>
+                  <td className="text-[var(--color-muted)]">{u.departement ?? '—'}</td>
+                  <td className="text-[var(--color-muted)]">{u.posteActuel?.nom ?? '—'}</td>
                   <td>
                     <div className="flex items-center justify-end gap-1">
-                      <button className="btn-ghost flex h-7 w-7 items-center justify-center rounded-[5px]" onClick={() => { setEditing(u); setFormOpen(true) }} aria-label={t('administration.form.editTitle')}>
-                        <Icons.edit size={15} />
+                      <button className="btn-ghost flex h-7 w-7 items-center justify-center rounded-[5px]" onClick={() => setHistoriqueUser(u)} aria-label="Historique">
+                        <Icons.history size={15} />
                       </button>
-                      <button className="btn-ghost flex h-7 w-7 items-center justify-center rounded-[5px]" onClick={() => setToDelete(u)} aria-label={t('administration.delete.confirm')}>
-                        <Icons.trash size={15} />
-                      </button>
+                      {isAdmin && (
+                        <>
+                          <button className="btn-ghost flex h-7 w-7 items-center justify-center rounded-[5px]" onClick={() => { setEditing(u); setFormOpen(true) }} aria-label={t('administration.form.editTitle')}>
+                            <Icons.edit size={15} />
+                          </button>
+                          <button className="btn-ghost flex h-7 w-7 items-center justify-center rounded-[5px]" onClick={() => setToDelete(u)} aria-label={t('administration.delete.confirm')}>
+                            <Icons.trash size={15} />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
               ))}
               {!isLoading && rows.length === 0 && (
-                <tr><td colSpan={5} className="py-12 text-center text-[var(--color-muted)]">{t('administration.empty')}</td></tr>
+                <tr><td colSpan={6} className="py-12 text-center text-[var(--color-muted)]">{t('administration.empty')}</td></tr>
               )}
               {isLoading && (
-                <tr><td colSpan={5} className="py-12 text-center text-[var(--color-faint)]">{t('common.loading')}</td></tr>
+                <tr><td colSpan={6} className="py-12 text-center text-[var(--color-faint)]">{t('common.loading')}</td></tr>
               )}
             </tbody>
           </table>
@@ -125,6 +147,10 @@ export function AdministrationPage() {
         cancelLabel={t('administration.delete.cancel')}
         busy={del.isPending}
       />
+
+      {historiqueUser && (
+        <HistoriqueModal utilisateur={historiqueUser} onClose={() => setHistoriqueUser(null)} />
+      )}
     </>
   )
 }

@@ -9,6 +9,6 @@ class DemandeInscription extends Model
     protected $table = 'demandes_inscription';
 
     protected $fillable = [
-    'nom', 'prenom', 'email', 'role', 'telephone', 'departement', 'message', 'statut',
+    'nom', 'prenom', 'email', 'role', 'telephone', 'departement', 'localisation', 'message', 'statut',
 ];
 }

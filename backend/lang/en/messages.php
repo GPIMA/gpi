@@ -10,13 +10,15 @@ return [
         'cree' => 'Equipment added.',
         'modifie' => 'Equipment updated.',
         'supprime' => 'Equipment removed.',
-    ],
-    'scan' => [
-        'termine' => 'Network scan complete: :count device(s) detected.',
+        'changement_etat_en_attente' => 'The status change is pending approval from an Admin or Super Admin.',
+        'changement_etat_approuve' => 'Status change approved.',
+        'changement_etat_rejete' => 'Status change rejected.',
     ],
     'incident' => [
         'signale' => 'Incident reported.',
         'resolu' => 'Incident resolved.',
+        'retour_traite' => 'Device return processed.',
+        'relance_remplacement' => 'Employee notified to return the replacement device.',
     ],
     'alerte' => [
         'resolue' => 'Alert resolved.',

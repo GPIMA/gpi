@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RoleUtilisateur;
 use App\Http\Requests\StoreUtilisateurRequest;
 use App\Http\Requests\UpdateUtilisateurRequest;
 use App\Http\Resources\UserResource;
@@ -10,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Gestion des utilisateurs (cas d'utilisation « Gérer les utilisateurs »,
@@ -19,7 +21,14 @@ class UtilisateurController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
+        $currentUser = $request->user();
+
         $users = User::query()
+            ->with(['affectationActive.equipement'])
+            ->when($currentUser && in_array($currentUser->role, [RoleUtilisateur::ADMIN, RoleUtilisateur::TECHNICIEN], true) && $currentUser->localisation, function ($q) use ($currentUser) {
+                $q->where('localisation', $currentUser->localisation);
+            })
+            ->when($request->filled('localisation'), fn ($q) => $q->where('localisation', 'like', '%'.$request->string('localisation').'%'))
             ->when($request->filled('role'), fn ($q) => $q->where('role', $request->string('role')))
             ->when($request->filled('q'), function ($q) use ($request) {
                 $terme = '%'.$request->string('q').'%';
@@ -29,7 +38,7 @@ class UtilisateurController extends Controller
                     ->orWhere('email', 'ilike', $terme));
             })
             ->orderBy('nom')
-            ->paginate($request->integer('per_page', 20))
+            ->paginate($request->integer('per_page', 10))
             ->withQueryString();
 
         return UserResource::collection($users);
@@ -38,11 +47,14 @@ class UtilisateurController extends Controller
     public function store(StoreUtilisateurRequest $request): JsonResponse
     {
         $data = $request->validated();
+
+        $this->verifierAccesSite($request->user(), $data['localisation'] ?? null);
+
         $data['password'] = Hash::make($data['password']);
 
         $user = User::create($data);
 
-        return (new UserResource($user))
+        return (new UserResource($user->load(['affectationActive.equipement'])))
             ->additional(['message' => __('messages.utilisateur.cree')])
             ->response()
             ->setStatusCode(201);
@@ -52,6 +64,11 @@ class UtilisateurController extends Controller
     {
         $data = $request->validated();
 
+        $this->verifierAccesSite($request->user(), $utilisateur->localisation);
+        if (array_key_exists('localisation', $data)) {
+            $this->verifierAccesSite($request->user(), $data['localisation']);
+        }
+
         if (! empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
@@ -60,7 +77,7 @@ class UtilisateurController extends Controller
 
         $utilisateur->update($data);
 
-        return (new UserResource($utilisateur->fresh()))
+        return (new UserResource($utilisateur->fresh(['affectationActive.equipement'])))
             ->additional(['message' => __('messages.utilisateur.modifie')])
             ->response();
     }
@@ -72,8 +89,27 @@ class UtilisateurController extends Controller
             abort(422, __('messages.utilisateur.auto_suppression'));
         }
 
+        $this->verifierAccesSite($request->user(), $utilisateur->localisation);
+
         $utilisateur->delete();
 
         return response()->json(['message' => __('messages.utilisateur.supprime')]);
+    }
+
+    /**
+     * Empêche un Admin (pas Super Admin) de créer/modifier/supprimer un
+     * utilisateur en dehors de son propre site.
+     */
+    private function verifierAccesSite(User $currentUser, ?string $localisation): void
+    {
+        if ($currentUser->role !== RoleUtilisateur::ADMIN || ! $currentUser->localisation) {
+            return;
+        }
+
+        if ($localisation !== $currentUser->localisation) {
+            throw ValidationException::withMessages([
+                'localisation' => ["Vous ne pouvez gérer que les utilisateurs du site {$currentUser->localisation}."],
+            ]);
+        }
     }
 }

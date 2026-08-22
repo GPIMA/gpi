@@ -7,38 +7,34 @@ import { PageHeader } from '@/components/PageHeader'
 import { StatusPill } from '@/components/StatusPill'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { Icons } from '@/components/icons'
-import { useDeleteEquipement, useEquipements, useScanReseau, type EquipementFilters } from './api'
+import { useDeleteEquipement, useEquipements, type EquipementFilters } from './api'
 import { EquipementForm } from './EquipementForm'
+import { HistoriqueEquipementModal } from './HistoriqueEquipementModal'
 
 export function EquipementsPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
   const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN'
+  const isTechnicien = user?.role === 'TECHNICIEN'
+  const canManage = isAdmin || isTechnicien
   const { data: enums } = useEnums()
 
   const [filters, setFilters] = useState<EquipementFilters>({ page: 1 })
   const [search, setSearch] = useState('')
   const { data, isLoading, isFetching } = useEquipements(filters)
-
+  const [historiqueFor, setHistoriqueFor] = useState<Equipement | null>(null)
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState<Equipement | null>(null)
+  const [affecting, setAffecting] = useState<Equipement | null>(null)
   const [toDelete, setToDelete] = useState<Equipement | null>(null)
-  const [notice, setNotice] = useState<string | null>(null)
 
   const del = useDeleteEquipement()
-  const scan = useScanReseau()
 
   // Debounce the search box into the query filter.
   useEffect(() => {
     const id = setTimeout(() => setFilters((f) => ({ ...f, q: search, page: 1 })), 350)
     return () => clearTimeout(id)
   }, [search])
-
-  useEffect(() => {
-    if (!notice) return
-    const id = setTimeout(() => setNotice(null), 4000)
-    return () => clearTimeout(id)
-  }, [notice])
 
   function openCreate() {
     setEditing(null)
@@ -48,10 +44,8 @@ export function EquipementsPage() {
     setEditing(e)
     setFormOpen(true)
   }
-
-  async function runScan() {
-    const res = await scan.mutateAsync()
-    setNotice(t('equipements.scanDone', { count: res.scan.nbDetectes }))
+  function openAffecter(e: Equipement) {
+    setAffecting(e)
   }
 
   async function confirmDelete() {
@@ -71,28 +65,13 @@ export function EquipementsPage() {
         subtitle={t('equipements.subtitle')}
         actions={
           isAdmin && (
-            <>
-              <button className="btn" onClick={runScan} disabled={scan.isPending}>
-                <Icons.scan size={16} />
-                {scan.isPending ? t('equipements.scanning') : t('equipements.scan')}
-              </button>
-              <button className="btn btn-primary" onClick={openCreate}>
-                <Icons.plus size={16} />
-                {t('equipements.add')}
-              </button>
-            </>
+            <button className="btn btn-primary" onClick={openCreate}>
+              <Icons.plus size={16} />
+              {t('equipements.add')}
+            </button>
           )
         }
       />
-
-      {notice && (
-        <div
-          className="mb-4 rounded-[6px] border px-3 py-2 text-sm"
-          style={{ borderColor: 'var(--color-brand-dim)', background: 'var(--color-brand-wash)', color: 'var(--color-ink)' }}
-        >
-          {notice}
-        </div>
-      )}
 
       <section className="panel">
         {/* Toolbar */}
@@ -128,6 +107,25 @@ export function EquipementsPage() {
               <option key={o.value} value={o.value}>{o.label}</option>
             ))}
           </select>
+          <select
+            className="input w-auto"
+            value={filters.localisation ?? ''}
+            onChange={(e) => setFilters((f) => ({ ...f, localisation: e.target.value, page: 1 }))}
+          >
+            <option value="">Toutes les localisations</option>
+            <option value="Rabat">Rabat</option>
+            <option value="Casablanca">Casablanca</option>
+            <option value="Tanger">Tanger</option>
+          </select>
+          <select
+            className="input w-auto"
+            value={filters.statutAffectation ?? ''}
+            onChange={(e) => setFilters((f) => ({ ...f, statutAffectation: e.target.value, page: 1 }))}
+          >
+            <option value="">Tous les statuts</option>
+            <option value="disponible">Disponible</option>
+            <option value="affecte">Déjà affecté</option>
+          </select>
         </div>
 
         {/* Table */}
@@ -141,7 +139,7 @@ export function EquipementsPage() {
                 <th>{t('equipements.cols.ip')}</th>
                 <th>{t('equipements.cols.localisation')}</th>
                 <th>{t('equipements.cols.affecte')}</th>
-                {isAdmin && <th className="text-right">{t('equipements.cols.actions')}</th>}
+                {canManage && <th className="text-right">{t('equipements.cols.actions')}</th>}
               </tr>
             </thead>
             <tbody>
@@ -154,19 +152,46 @@ export function EquipementsPage() {
                     </div>
                   </td>
                   <td className="text-[var(--color-muted)]">{e.typeLabel}</td>
-                  <td><StatusPill value={e.etat} label={e.etatLabel} /></td>
+                  <td>
+                    <StatusPill value={e.etat} label={e.etatLabel} />
+                    {e.demandeChangementEtatEnAttente && (
+                      <div className="mt-1">
+                        <StatusPill
+                          value="EN_ATTENTE"
+                          label={`→ ${e.demandeChangementEtatEnAttente.etatDemandeLabel} (en attente)`}
+                        />
+                      </div>
+                    )}
+                  </td>
                   <td className="mono text-[var(--color-muted)]">{e.adresseIP ?? '—'}</td>
                   <td className="text-[var(--color-muted)]">{e.localisation ?? '—'}</td>
                   <td className="text-[var(--color-muted)]">{e.affectation?.employe ?? '—'}</td>
-                  {isAdmin && (
+                  {canManage && (
                     <td>
                       <div className="flex items-center justify-end gap-1">
+                        {canManage && (
+                          <button
+                            className="btn-ghost flex h-7 items-center gap-1 rounded-[5px] px-2 text-xs disabled:opacity-40 disabled:cursor-not-allowed"
+                            onClick={() => openAffecter(e)}
+                            disabled={!!e.affectation}
+                            aria-label={t('equipements.affecter')}
+                            title={e.affectation ? (e.affectation.employe ?? undefined) : undefined}
+                          >
+                            <Icons.assign size={14} />
+                            {t('equipements.affecter')}
+                          </button>
+                        )}
+                        <button className="btn-ghost flex h-7 w-7 items-center justify-center rounded-[5px]" onClick={() => setHistoriqueFor(e)} aria-label="Historique">
+                          <Icons.history size={15} />
+                        </button>
                         <button className="btn-ghost flex h-7 w-7 items-center justify-center rounded-[5px]" onClick={() => openEdit(e)} aria-label={t('equipements.form.editTitle')}>
                           <Icons.edit size={15} />
                         </button>
-                        <button className="btn-ghost flex h-7 w-7 items-center justify-center rounded-[5px]" onClick={() => setToDelete(e)} aria-label={t('equipements.delete.confirm')}>
-                          <Icons.trash size={15} />
-                        </button>
+                        {isAdmin && (
+                          <button className="btn-ghost flex h-7 w-7 items-center justify-center rounded-[5px]" onClick={() => setToDelete(e)} aria-label={t('equipements.delete.confirm')}>
+                            <Icons.trash size={15} />
+                          </button>
+                        )}
                       </div>
                     </td>
                   )}
@@ -174,14 +199,14 @@ export function EquipementsPage() {
               ))}
               {!isLoading && rows.length === 0 && (
                 <tr>
-                  <td colSpan={isAdmin ? 7 : 6} className="py-12 text-center text-[var(--color-muted)]">
+                  <td colSpan={canManage ? 7 : 6} className="py-12 text-center text-[var(--color-muted)]">
                     {t('equipements.empty')}
                   </td>
                 </tr>
               )}
               {isLoading && (
                 <tr>
-                  <td colSpan={isAdmin ? 7 : 6} className="py-12 text-center text-[var(--color-faint)]">
+                  <td colSpan={canManage ? 7 : 6} className="py-12 text-center text-[var(--color-faint)]">
                     {t('common.loading')}
                   </td>
                 </tr>
@@ -224,6 +249,14 @@ export function EquipementsPage() {
 
       {formOpen && (
         <EquipementForm open={formOpen} onClose={() => setFormOpen(false)} equipement={editing} />
+      )}
+
+      {affecting && (
+        <EquipementForm open onClose={() => setAffecting(null)} equipement={affecting} affecterOnly />
+      )}
+
+      {historiqueFor && (
+        <HistoriqueEquipementModal equipement={historiqueFor} onClose={() => setHistoriqueFor(null)} />
       )}
 
       <ConfirmDialog

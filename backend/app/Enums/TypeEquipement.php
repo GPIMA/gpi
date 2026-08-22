@@ -13,4 +13,8 @@ enum TypeEquipement: string
     case IMPRIMANTE = 'IMPRIMANTE';
     case ROUTEUR = 'ROUTEUR';
     case SWITCH = 'SWITCH';
+    case SOURIS = 'SOURIS';
+    case CLAVIER = 'CLAVIER';
+    case ECRAN = 'ECRAN';
+    case SOCLE = 'SOCLE';
 }

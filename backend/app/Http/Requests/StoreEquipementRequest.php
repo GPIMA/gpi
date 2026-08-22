@@ -5,10 +5,17 @@ namespace App\Http\Requests;
 use App\Enums\EtatEquipement;
 use App\Enums\TypeEquipement;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class StoreEquipementRequest extends FormRequest
 {
+    /** The only sites equipment can be attached to. */
+    public const SITES = ['Rabat', 'Casablanca', 'Tanger'];
+
+    /** Peripherals with no network identity of their own — IP/MAC stay optional for these. */
+    public const TYPES_SANS_RESEAU = ['SOURIS', 'CLAVIER', 'ECRAN', 'SOCLE'];
+
     public function authorize(): bool
     {
         return true; // Route is already gated to administrators.
@@ -19,13 +26,19 @@ class StoreEquipementRequest extends FormRequest
         return [
             'nom' => ['required', 'string', 'max:120'],
             'type' => ['required', new Enum(TypeEquipement::class)],
-            'marque' => ['nullable', 'string', 'max:120'],
-            'modele' => ['nullable', 'string', 'max:120'],
-            'numeroSerie' => ['nullable', 'string', 'max:120'],
-            'adresseIP' => ['nullable', 'ip'],
-            'adresseMAC' => ['nullable', 'string', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$/'],
+            'marque' => ['required', 'string', 'max:120'],
+            'modele' => ['required', 'string', 'max:120'],
+            'numeroSerie' => ['required', 'string', 'max:120', 'regex:/^[A-Za-z0-9-]{3,}$/'],
+            'adresseIP' => [
+                'nullable', 'ip',
+                Rule::requiredIf(fn () => ! in_array($this->input('type'), self::TYPES_SANS_RESEAU, true)),
+            ],
+            'adresseMAC' => [
+                'nullable', 'string', 'regex:/^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$/',
+                Rule::requiredIf(fn () => ! in_array($this->input('type'), self::TYPES_SANS_RESEAU, true)),
+            ],
             'etat' => ['required', new Enum(EtatEquipement::class)],
-            'localisation' => ['nullable', 'string', 'max:160'],
+            'localisation' => ['required', 'string', Rule::in(self::SITES)],
             'dateAcquisition' => ['nullable', 'date'],
             'employeId' => ['nullable', 'integer', 'exists:users,id'],
         ];

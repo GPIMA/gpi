@@ -10,13 +10,15 @@ return [
         'cree' => 'Équipement ajouté.',
         'modifie' => 'Équipement modifié.',
         'supprime' => 'Équipement supprimé.',
-    ],
-    'scan' => [
-        'termine' => 'Scan réseau terminé : :count équipement(s) détecté(s).',
+        'changement_etat_en_attente' => "Le changement de statut est en attente d'approbation par un Admin ou un Super Admin.",
+        'changement_etat_approuve' => 'Changement de statut approuvé.',
+        'changement_etat_rejete' => 'Changement de statut rejeté.',
     ],
     'incident' => [
         'signale' => 'Incident signalé.',
         'resolu' => 'Incident résolu.',
+        'retour_traite' => 'Retour du poste traité.',
+        'relance_remplacement' => 'Employé relancé pour restituer le poste remplaçant.',
     ],
     'alerte' => [
         'resolue' => 'Alerte résolue.',

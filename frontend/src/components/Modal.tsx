@@ -20,11 +20,20 @@ export function Modal({
 }) {
   const ref = useRef<HTMLDivElement>(null)
 
+  // Move focus into the dialog only when it transitions to open — not on
+  // every re-render, or typing anywhere inside would keep stealing focus
+  // back to the container.
+  useEffect(() => {
+    if (open) ref.current?.focus()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open])
+
+  // Escape-to-close listener, kept separate so it can safely depend on the
+  // latest onClose without re-triggering the focus effect above.
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
     document.addEventListener('keydown', onKey)
-    ref.current?.focus()
     return () => document.removeEventListener('keydown', onKey)
   }, [open, onClose])
 

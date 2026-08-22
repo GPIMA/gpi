@@ -19,15 +19,16 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'nom',
-        'prenom',
-        'email',
-        'password',
-        'telephone',
-        'role',
-        'specialite',
-        'departement',
-    ];
+    'nom',
+    'prenom',
+    'email',
+    'password',
+    'telephone',
+    'role',
+    'specialite',
+    'departement',
+    'localisation',
+];
 
     protected $hidden = [
         'password',
@@ -94,6 +95,12 @@ class User extends Authenticatable
     public function affectations(): HasMany
     {
         return $this->hasMany(Affectation::class, 'employe_id');
+    }
+
+    /** Affectation active (poste actuellement en sa possession), s'il y en a une. */
+    public function affectationActive(): HasMany
+    {
+        return $this->affectations()->where('statut', 'EN_COURS');
     }
 
     /** Équipements assignés à ce technicien pour la supervision/alertes. */

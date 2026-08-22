@@ -8,6 +8,10 @@ return [
         'IMPRIMANTE' => 'Printer',
         'ROUTEUR' => 'Router',
         'SWITCH' => 'Switch',
+        'SOURIS' => 'Mouse',
+        'CLAVIER' => 'Keyboard',
+        'ECRAN' => 'Monitor',
+        'SOCLE' => 'Docking station',
     ],
 
     'etat_equipement' => [
@@ -15,6 +19,7 @@ return [
         'HORS_LIGNE' => 'Offline',
         'EN_PANNE' => 'Down',
         'MAINTENANCE' => 'Maintenance',
+        'EN_MAINTENANCE' => 'Maintenance',
     ],
 
     'type_alerte' => [
@@ -47,8 +52,15 @@ return [
     'statut_incident' => [
         'OUVERT' => 'Open',
         'EN_COURS' => 'In progress',
+        'EN_MAINTENANCE' => 'Under maintenance',
         'RESOLU' => 'Resolved',
         'FERME' => 'Closed',
+    ],
+
+    'motif_retour_poste' => [
+        'MAINTENANCE_SUR_PLACE' => 'Maintenance will be done on site',
+        'NOUVELLE_DATE' => 'Maintenance will take longer, new return date',
+        'POSTE_REMPLACE' => 'Device is damaged, a new one is assigned',
     ],
 
     'expediteur_type' => [
@@ -60,6 +72,12 @@ return [
         'ADMIN' => 'Administrator',
         'TECHNICIEN' => 'Technician',
         'EMPLOYE' => 'Employee',
+    ],
+
+    'statut_demande_changement_etat' => [
+        'EN_ATTENTE' => 'Pending',
+        'APPROUVEE' => 'Approved',
+        'REJETEE' => 'Rejected',
     ],
 
 ];

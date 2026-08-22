@@ -12,8 +12,9 @@ export interface Utilisateur {
   telephone: string | null
   role: Role
   roleLabel: string
-  specialite: string | null
   departement: string | null
+  localisation: string | null
+  posteActuel?: { id: number; nom: string; type: string | null; typeLabel: string | null } | null
   dateCreation: string
 }
 
@@ -42,7 +43,40 @@ export interface Equipement {
   localisation: string | null
   dateAcquisition: string | null
   affectation?: { id: number; employeId: number; employe: string } | null
+  demandeChangementEtatEnAttente?: {
+    id: number
+    etatActuel: string
+    etatActuelLabel: string
+    etatDemande: string
+    etatDemandeLabel: string
+    createdAt: string
+  } | null
   dateCreation: string
+}
+
+export interface DemandeChangementEtatCommentaire {
+  id: number
+  contenu: string
+  auteur: string | null
+  auteurId: number
+  createdAt: string
+}
+
+export interface DemandeChangementEtat {
+  id: number
+  equipement?: { id: number; nom: string; type: string; typeLabel: string; localisation: string | null }
+  demandeur?: { id: number; nomComplet: string }
+  etatActuel: string
+  etatActuelLabel: string
+  etatDemande: string
+  etatDemandeLabel: string
+  statut: 'EN_ATTENTE' | 'APPROUVEE' | 'REJETEE'
+  statutLabel: string
+  motif: string | null
+  traitePar?: string | null
+  traiteLe: string | null
+  commentaireTraitement: string | null
+  createdAt: string
 }
 
 /** Laravel paginated resource collection. */
@@ -56,14 +90,6 @@ export interface Paginated<T> {
     from: number | null
     to: number | null
   }
-}
-
-export interface Metrique {
-  id: number
-  dateHeure: string
-  cpu: number
-  ram: number
-  disque: number
 }
 
 export interface Alerte {
@@ -96,6 +122,7 @@ export interface RegleAlerte {
 
 export interface Incident {
   id: number
+  reference: string
   titre: string
   description: string
   statut: string
@@ -105,11 +132,24 @@ export interface Incident {
   solution: string | null
   dateSignalement: string
   dateResolution: string | null
-  equipement?: { id: number; nom: string }
-  signalePar?: string
-  traitePar?: string | null
+  dateRestitutionPrevue?: string | null
+  /** Poste déjà reçu par le technicien : distingue "à ramener" de "à récupérer" pour dateRestitutionPrevue. */
+  dateReceptionPoste?: string | null
+  pieceJointes?: { url: string; nom: string }[]
+  equipement?: { id: number; nom: string; type?: string; localisation?: string | null }
+employeId?: number
+signalePar?: string
+signaleParRole?: string
+signaleParRoleLabel?: string
+traitePar?: string | null
 }
-
+export interface IncidentCommentaire {
+  id: number
+  contenu: string
+  auteur: string | null
+  auteurId: number
+  createdAt: string
+}
 export interface NotificationItem {
   id: number
   sujet: string
@@ -169,11 +209,6 @@ export interface DashboardData {
   }
 }
 
-export interface SupervisionRow {
-  equipement: Equipement
-  metrique: Metrique | null
-}
-
 export interface EnumDictionary {
   typeEquipement: EnumOption[]
   etatEquipement: EnumOption[]
@@ -182,8 +217,10 @@ export interface EnumDictionary {
   etatAlerte: EnumOption[]
   canalNotification: EnumOption[]
   statutIncident: EnumOption[]
+  motifRetourPoste: EnumOption[]
   expediteurType: EnumOption[]
   roleUtilisateur: EnumOption[]
+  statutDemandeChangementEtat: EnumOption[]
 }
 export interface DemandeInscription {
   id: number

@@ -6,8 +6,10 @@ use App\Enums\CanalNotification;
 use App\Enums\EtatAlerte;
 use App\Enums\EtatEquipement;
 use App\Enums\ExpediteurType;
+use App\Enums\MotifRetourPoste;
 use App\Enums\RoleUtilisateur;
 use App\Enums\Severite;
+use App\Enums\StatutDemandeChangementEtat;
 use App\Enums\StatutIncident;
 use App\Enums\TypeAlerte;
 use App\Enums\TypeEquipement;
@@ -30,6 +32,8 @@ class EnumController extends Controller
             'etatAlerte' => EtatAlerte::options(),
             'canalNotification' => CanalNotification::options(),
             'statutIncident' => StatutIncident::options(),
+            'statutDemandeChangementEtat' => StatutDemandeChangementEtat::options(),
+            'motifRetourPoste' => MotifRetourPoste::options(),
             'expediteurType' => ExpediteurType::options(),
             'roleUtilisateur' => RoleUtilisateur::options(),
         ]);

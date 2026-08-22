@@ -6,6 +6,7 @@ import type { Paginated, Utilisateur } from '@/lib/api/types'
 export interface UtilisateurFilters {
   q?: string
   role?: string
+  localisation?: string
   page?: number
 }
 
@@ -16,8 +17,8 @@ export interface UtilisateurInput {
   password?: string
   role: string
   telephone?: string | null
-  specialite?: string | null
   departement?: string | null
+  localisation?: string | null
 }
 
 export function useUtilisateurs(filters: UtilisateurFilters) {
@@ -26,8 +27,7 @@ export function useUtilisateurs(filters: UtilisateurFilters) {
     queryKey: ['utilisateurs', filters, i18n.language],
     queryFn: async () => {
       const { data } = await api.get<Paginated<Utilisateur>>('/utilisateurs', {
-        params: { q: filters.q || undefined, role: filters.role || undefined, page: filters.page || 1 },
-      })
+        params: { q: filters.q || undefined, role: filters.role || undefined, localisation: filters.localisation || undefined, page: filters.page || 1 }, })
       return data
     },
     placeholderData: (prev) => prev,
@@ -60,5 +60,50 @@ export function useDeleteUtilisateur() {
   return useMutation({
     mutationFn: async (id: number) => (await api.delete(`/utilisateurs/${id}`)).data,
     onSuccess: invalidate,
+  })
+}
+export interface HistoriqueEquipementDetail {
+  id: number
+  nom: string
+  type: string | null
+  typeLabel: string | null
+  marque: string | null
+  modele: string | null
+  numeroSerie: string | null
+  adresseIP: string | null
+  adresseMAC: string | null
+  etat: string | null
+  etatLabel: string | null
+  localisation: string | null
+  dateAcquisition: string | null
+}
+
+export interface HistoriqueEntry {
+  id: number
+  action: string
+  description: string
+  createdAt: string
+  equipement: HistoriqueEquipementDetail | null
+  technicienAssigne: string | null
+  auteur: string | null
+}
+
+export function useHistoriqueUtilisateur(userId: number | null) {
+  return useQuery({
+    queryKey: ['historique-utilisateur', userId],
+    queryFn: async () => {
+      const { data } = await api.get<HistoriqueEntry[]>(`/utilisateurs/${userId}/historique`)
+      return data
+    },
+    enabled: !!userId,
+  })
+}
+
+export function useAjouterCommentaireUtilisateur(userId: number) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (commentaire: string) =>
+      (await api.post<HistoriqueEntry>(`/utilisateurs/${userId}/commentaires`, { commentaire })).data,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['historique-utilisateur', userId] }),
   })
 }
