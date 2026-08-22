@@ -15,6 +15,7 @@ class ChatbotService
     {
         return match (config('chatbot.driver')) {
             'openai' => new OpenAiCompatibleDriver(new RuleBasedDriver),
+            'anthropic' => new AnthropicDriver(new RuleBasedDriver),
             default => new RuleBasedDriver,
         };
     }
