@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * Moteur LLM via l'API Anthropic (Claude) — endpoint /v1/messages.
+ * Le prompt système est construit dynamiquement par {@see PromptSysteme},
+ * avec les connaissances GPI et le contexte de l'utilisateur courant.
  * Contrairement aux API compatibles OpenAI, le prompt système est un champ
  * dédié et l'authentification se fait via l'en-tête `x-api-key`.
  * Tout est piloté par la configuration/l'environnement ; en cas d'erreur ou
@@ -18,18 +20,19 @@ class AnthropicDriver implements ChatbotDriver
     {
     }
 
-    public function repondre(string $question, array $historique = []): string
+    public function repondre(string $question, array $historique = [], array $contexte = []): string
     {
         $config = config('chatbot.anthropic');
 
         if (empty($config['api_key'])) {
-            return $this->repli->repondre($question, $historique);
+            return $this->repli->repondre($question, $historique, $contexte);
         }
 
         // L'API Anthropic n'accepte que les rôles user/assistant dans
-        // `messages` : le prompt système part séparément.
+        // `messages` : le prompt système part séparément. On borne
+        // l'historique pour garder le prompt léger et rapide.
         $messages = array_merge(
-            $historique,
+            array_slice($historique, -20),
             [['role' => 'user', 'content' => $question]],
         );
 
@@ -43,7 +46,7 @@ class AnthropicDriver implements ChatbotDriver
                 ->post(rtrim($config['base_url'], '/').'/messages', [
                     'model' => $config['model'],
                     'max_tokens' => $config['max_tokens'],
-                    'system' => config('chatbot.system_prompt'),
+                    'system' => PromptSysteme::construire($contexte),
                     'messages' => $messages,
                     'temperature' => 0.3,
                 ]);
@@ -51,7 +54,7 @@ class AnthropicDriver implements ChatbotDriver
             if ($reponse->failed()) {
                 Log::warning('Chatbot LLM (Anthropic) échec', ['status' => $reponse->status(), 'body' => $reponse->body()]);
 
-                return $this->repli->repondre($question, $historique);
+                return $this->repli->repondre($question, $historique, $contexte);
             }
 
             $blocs = $reponse->json('content', []);
@@ -60,11 +63,11 @@ class AnthropicDriver implements ChatbotDriver
 
             return is_string($texte) && $texte !== ''
                 ? trim($texte)
-                : $this->repli->repondre($question, $historique);
+                : $this->repli->repondre($question, $historique, $contexte);
         } catch (\Throwable $e) {
             Log::warning('Chatbot LLM (Anthropic) exception', ['message' => $e->getMessage()]);
 
-            return $this->repli->repondre($question, $historique);
+            return $this->repli->repondre($question, $historique, $contexte);
         }
     }
 }

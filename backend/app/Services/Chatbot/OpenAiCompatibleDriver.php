@@ -16,17 +16,17 @@ class OpenAiCompatibleDriver implements ChatbotDriver
     {
     }
 
-    public function repondre(string $question, array $historique = []): string
+    public function repondre(string $question, array $historique = [], array $contexte = []): string
     {
         $config = config('chatbot.openai');
 
         if (empty($config['api_key'])) {
-            return $this->repli->repondre($question, $historique);
+            return $this->repli->repondre($question, $historique, $contexte);
         }
 
         $messages = array_merge(
-            [['role' => 'system', 'content' => config('chatbot.system_prompt')]],
-            $historique,
+            [['role' => 'system', 'content' => PromptSysteme::construire($contexte)]],
+            array_slice($historique, -20),
             [['role' => 'user', 'content' => $question]],
         );
 
@@ -43,18 +43,18 @@ class OpenAiCompatibleDriver implements ChatbotDriver
             if ($reponse->failed()) {
                 Log::warning('Chatbot LLM échec', ['status' => $reponse->status()]);
 
-                return $this->repli->repondre($question, $historique);
+                return $this->repli->repondre($question, $historique, $contexte);
             }
 
             $contenu = $reponse->json('choices.0.message.content');
 
             return is_string($contenu) && $contenu !== ''
                 ? trim($contenu)
-                : $this->repli->repondre($question, $historique);
+                : $this->repli->repondre($question, $historique, $contexte);
         } catch (\Throwable $e) {
             Log::warning('Chatbot LLM exception', ['message' => $e->getMessage()]);
 
-            return $this->repli->repondre($question, $historique);
+            return $this->repli->repondre($question, $historique, $contexte);
         }
     }
 }

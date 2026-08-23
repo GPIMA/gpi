@@ -5,6 +5,7 @@ import { BrandMark } from '@/components/BrandMark'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { Icons } from '@/components/icons'
 import { NotificationsBell } from '@/features/notifications/NotificationsBell'
+import { ChatWidget } from '@/features/assistant/ChatWidget'
 import { visibleSections } from './navigation'
 
 export function AppShell() {
@@ -91,6 +92,9 @@ export function AppShell() {
               <Icons.logout size={17} />
             </button>
           </div>
+          <p className="mono mt-3 text-center text-[10px] uppercase tracking-wider text-[var(--color-faint)]">
+            Powered by GPI
+          </p>
         </div>
       </aside>
 
@@ -110,6 +114,8 @@ export function AppShell() {
           <Outlet />
         </main>
       </div>
+
+      <ChatWidget />
     </div>
   )
 }

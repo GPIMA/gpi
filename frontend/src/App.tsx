@@ -13,7 +13,6 @@ const EquipementsPage = lazy(() => import('@/features/equipements/EquipementsPag
 const AlertesPage = lazy(() => import('@/features/alertes/AlertesPage').then((m) => ({ default: m.AlertesPage })))
 const IncidentsPage = lazy(() => import('@/features/incidents/IncidentsPage').then((m) => ({ default: m.IncidentsPage })))
 const PredictionsPage = lazy(() => import('@/features/predictions/PredictionsPage').then((m) => ({ default: m.PredictionsPage })))
-const AssistantPage = lazy(() => import('@/features/assistant/AssistantPage').then((m) => ({ default: m.AssistantPage })))
 const ReglesPage = lazy(() => import('@/features/regles/ReglesPage').then((m) => ({ default: m.ReglesPage })))
 const AdministrationPage = lazy(() => import('@/features/administration/AdministrationPage').then((m) => ({ default: m.AdministrationPage })))
 const DemandesInscriptionPage = lazy(() => import('@/features/administration/DemandesInscriptionPage').then((m) => ({ default: m.DemandesInscriptionPage })))
@@ -46,7 +45,6 @@ export default function App() {
             <Route path="alertes" element={<AlertesPage />} />
             <Route path="incidents" element={<IncidentsPage />} />
             <Route path="predictions" element={<PredictionsPage />} />
-            <Route path="assistant" element={<AssistantPage />} />
             <Route path="regles" element={<ReglesPage />} />
             <Route path="administration" element={<AdministrationPage />} />
             <Route
@@ -76,7 +74,7 @@ export default function App() {
 
 function VitrineRedirect() {
   useEffect(() => {
-    window.location.replace('/vitrine/')
+    window.location.replace('/vitrine/index.html')
   }, [])
 
   return null

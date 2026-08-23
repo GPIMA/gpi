@@ -31,7 +31,6 @@ export const NAV_SECTIONS: NavSection[] = [
     titleKey: 'intelligence',
     items: [
       { to: '/predictions', key: 'predictions', icon: 'predictions' },
-      { to: '/assistant', key: 'chatbot', icon: 'chatbot' },
     ],
   },
   {

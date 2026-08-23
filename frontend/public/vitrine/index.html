@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GPI — Gestion de Parc Informatique</title>
-  <meta name="description" content="Vitrine professionnelle du projet GPI : gestion, supervision et pilotage intelligent du parc informatique." />
+  <title>Power GPI — Gestion de Parc Informatique</title>
+  <meta name="description" content="Vitrine professionnelle du projet Power GPI : gestion, supervision et pilotage intelligent du parc informatique." />
   <link rel="icon" href="assets/favicon.svg" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="auth.css" />
@@ -13,8 +13,8 @@
   <div class="progress" aria-hidden="true"></div>
 
   <header class="header" data-header>
-    <a class="brand" href="#accueil" aria-label="Accueil GPI">
-      <img src="assets/gpi-logo.svg" alt="Logo GPI" />
+    <a class="brand" href="#accueil" aria-label="Accueil Power GPI">
+      <img src="assets/gpi-logo.svg" alt="Logo Power GPI" />
     </a>
 
     <nav class="nav" data-nav aria-label="Navigation principale">
@@ -44,7 +44,7 @@
         <div class="hero__content reveal is-visible">
           <p class="eyebrow">Application web • Gestion IT • Supervision</p>
           <h1>Votre parc informatique, maîtrisé simplement.</h1>
-          <p class="hero__lead">GPI centralise les équipements, automatise le suivi des incidents et offre une vision claire de l'état du parc informatique.</p>
+          <p class="hero__lead">Power GPI centralise les équipements, automatise le suivi des incidents et offre une vision claire de l'état du parc informatique.</p>
           <p class="hero__text">Une plateforme pensée pour les administrateurs, techniciens et employés : inventaire, réclamations, anomalies, alertes, chatbot et tableau de bord professionnel.</p>
           <div class="hero__actions">
             <a class="btn btn--primary" href="#solution">Découvrir le projet</a>
@@ -80,7 +80,7 @@
         <div class="section-heading reveal">
           <p class="eyebrow">Domaine d'activité</p>
           <h2>Un système complet pour organiser le service informatique.</h2>
-          <p>GPI répond aux besoins essentiels d'un parc informatique moderne : centraliser, suivre, alerter, assister et analyser.</p>
+          <p>Power GPI répond aux besoins essentiels d'un parc informatique moderne : centraliser, suivre, alerter, assister et analyser.</p>
         </div>
 
         <div class="solution-grid">
@@ -119,7 +119,7 @@
 
         <div class="dashboard-preview reveal">
           <aside class="dashboard-sidebar">
-            <img src="assets/gpi-logo.svg" alt="GPI" />
+            <img src="assets/gpi-logo.svg" alt="Power GPI" />
             <a class="active">Tableau de bord</a><a>Équipements</a><a>Réclamations</a><a>Anomalies</a><a>Alertes</a><a>Utilisateurs</a>
           </aside>
           <div class="dashboard-main">
@@ -172,7 +172,7 @@
       <div class="container app-access__card reveal">
         <div>
           <p class="eyebrow">Accès application</p>
-          <h2>Connectez-vous pour utiliser GPI.</h2>
+          <h2>Connectez-vous pour utiliser Power GPI.</h2>
           <p>L'accès à l'application web est réservé aux utilisateurs autorisés. Pour créer un compte, envoyez une demande d'accès via le formulaire.</p>
         </div>
         <div class="app-access__actions">
@@ -184,14 +184,14 @@
 
     <section class="section about" id="apropos">
       <div class="container about-grid">
-        <article class="about-card reveal"><p class="eyebrow">Résumé</p><h2>Une application utile, claire et évolutive.</h2><p>GPI transforme la gestion informatique en un processus structuré : chaque équipement est identifié, chaque problème est suivi, chaque alerte est priorisée et chaque action est historisée.</p></article>
+        <article class="about-card reveal"><p class="eyebrow">Résumé</p><h2>Une application utile, claire et évolutive.</h2><p>Power GPI transforme la gestion informatique en un processus structuré : chaque équipement est identifié, chaque problème est suivi, chaque alerte est priorisée et chaque action est historisée.</p></article>
         <article class="roles-card reveal"><h3>Profils utilisateurs</h3><div><strong>Administrateur</strong><span>Gère les équipements, utilisateurs, règles et tableaux de bord.</span></div><div><strong>Technicien</strong><span>Traite les anomalies, intervient et met à jour les statuts.</span></div><div><strong>Employé</strong><span>Déclare les problèmes et suit l'évolution des demandes.</span></div></article>
       </div>
     </section>
 
     <section class="section contact" id="contact">
       <div class="container contact-card reveal">
-        <div><p class="eyebrow">Contact</p><h2>Projet prêt à être présenté.</h2><p>Cette vitrine présente le projet GPI de façon professionnelle et peut évoluer vers une landing page complète connectée à l'application.</p></div>
+        <div><p class="eyebrow">Contact</p><h2>Projet prêt à être présenté.</h2><p>Cette vitrine présente le projet Power GPI de façon professionnelle et peut évoluer vers une landing page complète connectée à l'application.</p></div>
         <form class="contact-form" data-form>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <label>Nom<input type="text" id="contact-nom" placeholder="Votre nom" pattern="^[^0-9]+$" title="Le nom ne doit pas contenir de chiffres." required /></label>
@@ -235,6 +235,23 @@
   </main>
 
 <script>
+// URL de l'API backend, déduite de l'endroit où la vitrine est servie :
+// - en local (localhost/127.0.0.1) -> backend local sur le port 8000
+// - sur un Codespace forwardé (*-5173.app.github.dev) -> même Codespace, port 8000
+// - sinon (production, ex. Vercel) -> backend déployé
+// Évite de coder l'URL en dur, qui casserait hors de l'environnement local.
+function apiBaseUrl() {
+  const { protocol, hostname } = window.location;
+
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return 'http://localhost:8000';
+  }
+  if (hostname.endsWith('.app.github.dev')) {
+    return `${protocol}//${hostname.replace(/-5173\.app\.github\.dev$/, '-8000.app.github.dev')}`;
+  }
+  return 'https://gpi-backend.onrender.com';
+}
+
 // Affiche/masque Département (employé) selon le rôle choisi, comme dans le
 // formulaire d'ajout d'utilisateur côté admin.
 function majChampsRole() {
@@ -288,7 +305,7 @@ async function envoyerDemande() {
   }
 
   try {
-    const res = await fetch('http://localhost:8000/api/demandes-inscription', {
+    const res = await fetch(`${apiBaseUrl()}/api/demandes-inscription`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nom, prenom, telephone, role, localisation, departement, email, message })
@@ -316,7 +333,7 @@ async function envoyerDemande() {
   <button class="back-to-top" data-top type="button" aria-label="Retour en haut">↑</button>
 
   <footer class="footer">
-    <div class="container footer__inner"><img src="assets/gpi-logo.svg" alt="GPI" /><p>© 2026 — GPI, Gestion de Parc Informatique.</p></div>
+    <div class="container footer__inner"><img src="assets/gpi-logo.svg" alt="Power GPI" /><p>© 2026 — Power GPI, Gestion de Parc Informatique.<br /><small style="opacity:.6">Powered by GPI</small></p></div>
   </footer>
 
   <script src="script.js"></script>
