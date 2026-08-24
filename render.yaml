@@ -43,7 +43,11 @@ services:
       - key: ADMIN_PRENOM
         value: GPI
       - key: CHATBOT_DRIVER
-        value: rule
+        value: anthropic
+      - key: CHATBOT_ANTHROPIC_API_KEY
+        sync: false
+      - key: CHATBOT_ANTHROPIC_MODEL
+        value: claude-sonnet-4-5
 
 databases:
   - name: gpi-database

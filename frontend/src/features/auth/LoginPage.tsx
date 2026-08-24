@@ -24,10 +24,16 @@ export function LoginPage() {
 const role = utilisateur.role
 navigate(role === 'TECHNICIEN' || role === 'EMPLOYE' ? '/equipements' : '/dashboard', { replace: true })
     } catch (err) {
-      const apiMessage = isAxiosError(err)
-        ? (err.response?.data?.errors?.email?.[0] ?? err.response?.data?.message)
-        : undefined
-      setError(apiMessage ?? t('auth.error'))
+      if (isAxiosError(err) && !err.response) {
+        // La requête n'a jamais atteint le serveur (réseau, CORS, backend
+        // injoignable) : ne pas laisser croire que les identifiants sont faux.
+        setError(t('auth.networkError'))
+      } else {
+        const apiMessage = isAxiosError(err)
+          ? (err.response?.data?.errors?.email?.[0] ?? err.response?.data?.message)
+          : undefined
+        setError(apiMessage ?? t('auth.error'))
+      }
     } finally {
       setBusy(false)
     }
@@ -54,7 +60,7 @@ navigate(role === 'TECHNICIEN' || role === 'EMPLOYE' ? '/equipements' : '/dashbo
           href="/vitrine/index.html"
           className="inline-flex items-center gap-3 rounded-full bg-white/85 px-4 py-3 shadow-[0_14px_34px_rgba(7,59,103,.12)] ring-1 ring-[#d8e5ee] backdrop-blur"
         >
-          <img src="/vitrine/assets/gpi-logo.svg" alt="Logo GPI" className="h-10 w-auto" />
+          <img src="/vitrine/assets/gpi-logo.svg" alt="Logo Power GPI" className="h-10 w-auto" />
           <span className="hidden text-sm font-black uppercase tracking-[0.16em] text-[#073b67] sm:inline">
             Application web
           </span>
@@ -77,7 +83,7 @@ navigate(role === 'TECHNICIEN' || role === 'EMPLOYE' ? '/equipements' : '/dashbo
             Connexion sécurisée
           </p>
           <h1 className="max-w-2xl text-[clamp(44px,6vw,82px)] font-black leading-[0.95] tracking-[-0.06em] text-[#08111c]">
-            Accédez à votre espace GPI.
+            Accédez à votre espace Power GPI.
           </h1>
           <p className="mt-6 max-w-xl text-[clamp(21px,2.4vw,32px)] font-extrabold leading-tight text-[#173d5b]">
             Gérez votre parc informatique depuis une interface claire, rapide et professionnelle.
@@ -110,10 +116,10 @@ navigate(role === 'TECHNICIEN' || role === 'EMPLOYE' ? '/equipements' : '/dashbo
                 Se connecter
               </h2>
               <p className="mt-3 text-sm font-semibold leading-6 text-[#526273]">
-                Entrez vos identifiants pour accéder à l’application web GPI.
+                Entrez vos identifiants pour accéder à l’application web Power GPI.
               </p>
             </div>
-            <img src="/vitrine/assets/favicon.svg" alt="GPI" className="h-14 w-14 rounded-2xl" />
+            <img src="/vitrine/assets/favicon.svg" alt="Power GPI" className="h-14 w-14 rounded-2xl" />
           </div>
 
           <form onSubmit={onSubmit} className="space-y-5">

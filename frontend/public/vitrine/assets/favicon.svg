@@ -1,1 +1,13 @@
-<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="14" fill="#EAF5FA"/><text x="7" y="44" font-family="Arial Black,Arial,sans-serif" font-size="28" letter-spacing="-4" fill="#073B67">GP</text><rect x="48" y="16" width="6" height="28" fill="#073B67"/><rect x="48" y="16" width="6" height="8" fill="#00B4E8"/></svg>
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="boltGrad" x1="16" y1="6" x2="48" y2="58">
+      <stop stop-color="#073B67"/>
+      <stop offset="1" stop-color="#00B4E8"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#EAF5FA"/>
+  <path d="M37 6 L16 35 H27 L24 58 L48 26 H34 Z" fill="url(#boltGrad)"/>
+  <circle cx="37" cy="6" r="3.6" fill="#073B67"/>
+  <circle cx="48" cy="26" r="3.6" fill="#00B4E8"/>
+  <circle cx="24" cy="58" r="3.6" fill="#65AEDC"/>
+</svg>

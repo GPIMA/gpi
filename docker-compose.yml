@@ -1,0 +1,46 @@
+# Environnement de développement local complet (backend + frontend) pour GPI.
+#
+# Usage :
+#   docker compose up
+#
+# Puis ouvrir http://localhost:5173 (identifiants de démo : admin@gpi.local / Gpi@2026).
+# L'API backend est sur http://localhost:8000/api.
+#
+# Rien à installer sur la machine (ni PHP, ni Composer, ni Node) : tout tourne
+# dans les conteneurs. Le code source est monté en volume, donc les modifications
+# faites sur la machine hôte sont prises en compte immédiatement (hot reload).
+#
+# Ceci est un environnement de DÉVELOPPEMENT uniquement (base SQLite locale,
+# clés/secrets par défaut). Le déploiement en production utilise
+# backend/Dockerfile + render.yaml (PostgreSQL, secrets dédiés).
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    volumes:
+      - ./backend:/app
+      - ./docker/backend-entrypoint.sh:/entrypoint.sh
+    ports:
+      - "8000:8000"
+    command: ["/bin/sh", "/entrypoint.sh"]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+    volumes:
+      - ./frontend:/app
+      # node_modules dans un volume dédié : évite de mélanger des modules
+      # natifs compilés pour un autre OS/libc avec ceux du conteneur.
+      - frontend_node_modules:/app/node_modules
+      - ./docker/frontend-entrypoint.sh:/entrypoint.sh
+    ports:
+      - "5173:5173"
+    command: ["/bin/sh", "/entrypoint.sh"]
+    depends_on:
+      - backend
+
+volumes:
+  frontend_node_modules:
