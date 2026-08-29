@@ -68,6 +68,7 @@ Route::post('/incidents/{incident}/supprimer', [IncidentController::class, 'supp
     Route::get('/assistant/conversations', [ConversationController::class, 'index']);
     Route::get('/assistant/conversations/{conversation}', [ConversationController::class, 'show']);
     Route::post('/assistant/message', [ConversationController::class, 'envoyer']);
+    Route::get('/assistant/statut', [ConversationController::class, 'statut']);
 
     Route::middleware('role:SUPER_ADMIN,ADMIN')->group(function () {
         Route::post('/equipements', [EquipementController::class, 'store']);

@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "GPI",
+    "name": "Power GPI",
     "full": "Gestion de Parc Informatique",
     "tagline": "Système intelligent de gestion de parc informatique"
   },
@@ -29,6 +29,7 @@
     "submit": "Se connecter",
     "submitting": "Connexion…",
     "error": "Connexion impossible. Vérifiez vos identifiants.",
+    "networkError": "Impossible de joindre le serveur. Vérifiez votre connexion réseau et réessayez.",
     "logout": "Se déconnecter"
   },
   "common": {
@@ -191,7 +192,11 @@
     "send": "Envoyer",
     "thinking": "L'assistant rédige…",
     "welcome": "Bonjour ! Décrivez votre problème informatique et je vous aiderai au mieux.",
-    "examples": "Exemples : mot de passe oublié · imprimante en panne · réseau lent"
+    "examples": "Exemples : mot de passe oublié · imprimante en panne · réseau lent",
+    "open": "Ouvrir l'assistant",
+    "close": "Fermer",
+    "iaActive": "IA activée",
+    "iaHorsLigne": "Mode hors-ligne"
   },
   "predictions": {
     "title": "Prédictions",

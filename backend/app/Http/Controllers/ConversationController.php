@@ -58,6 +58,12 @@ class ConversationController extends Controller
         ], 201);
     }
 
+    /** Le moteur actif est-il une vraie IA ou le mode hors-ligne ? Affiché dans l'interface. */
+    public function statut(ChatbotService $chatbot): JsonResponse
+    {
+        return response()->json($chatbot->statut());
+    }
+
     private function resoudreConversation(Request $request, array $data): Conversation
     {
         if (! empty($data['conversationId'])) {

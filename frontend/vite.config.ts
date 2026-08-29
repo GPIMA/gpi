@@ -10,4 +10,9 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  server: {
+    // Autorise l'accès via l'URL forwardée d'un GitHub Codespace
+    // (proxy avec un Host différent de localhost, bloqué par défaut par Vite).
+    allowedHosts: ['.app.github.dev'],
+  },
 })

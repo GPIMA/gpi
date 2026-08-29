@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "GPI",
+    "name": "Power GPI",
     "full": "IT Fleet Management",
     "tagline": "Intelligent IT fleet management system"
   },
@@ -29,6 +29,7 @@
     "submit": "Sign in",
     "submitting": "Signing in…",
     "error": "Sign-in failed. Check your credentials.",
+    "networkError": "Couldn't reach the server. Check your network connection and try again.",
     "logout": "Sign out"
   },
   "common": {
@@ -191,7 +192,11 @@
     "send": "Send",
     "thinking": "The assistant is typing…",
     "welcome": "Hi! Describe your IT problem and I'll help as best I can.",
-    "examples": "Examples: forgotten password · printer down · slow network"
+    "examples": "Examples: forgotten password · printer down · slow network",
+    "open": "Open assistant",
+    "close": "Close",
+    "iaActive": "AI enabled",
+    "iaHorsLigne": "Offline mode"
   },
   "predictions": {
     "title": "Predictions",

@@ -12,6 +12,7 @@ interface ChatbotDriver
     /**
      * @param  string  $question  dernière question de l'utilisateur
      * @param  array<int, array{role: string, content: string}>  $historique  tours précédents
+     * @param  array{nom?: string, role?: string}  $contexte  infos sur l'utilisateur courant, pour personnaliser la réponse
      */
-    public function repondre(string $question, array $historique = []): string;
+    public function repondre(string $question, array $historique = [], array $contexte = []): string;
 }
