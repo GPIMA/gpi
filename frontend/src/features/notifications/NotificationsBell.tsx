@@ -61,7 +61,7 @@ export function NotificationsBell() {
               <div key={n.id} className="flex gap-2.5 px-4 py-3" style={{ background: n.lue ? 'transparent' : 'var(--color-brand-wash)' }}>
                 {!n.lue && <span className="mt-1.5 dot shrink-0" style={{ background: 'var(--color-brand)' }} />}
                 <div className={n.lue ? 'pl-[18px]' : ''}>
-                  <p className="text-sm">{n.contenu}</p>
+                  <p className="text-sm" style={{ color: '#ff0000' }}>{n.contenu}</p>
                   <p className="mono text-[10.5px] text-[var(--color-faint)]">
                     {n.canalLabel} · {new Date(n.dateEnvoi).toLocaleString(i18n.language, { dateStyle: 'short', timeStyle: 'short' })}
                   </p>

@@ -1,0 +1,79 @@
+<svg width="680" height="560" viewBox="0 0 680 560" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Architecture du projet GPI</title>
+<desc>Schéma montrant le flux entre le navigateur, le frontend React, l'API Laravel et la base MySQL.</desc>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#5F5E5A"/>
+  </marker>
+  <style>
+    .box { rx: 8; stroke-width: 1.5; }
+    .title { font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 700; text-anchor: middle; }
+    .sub { font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-anchor: middle; }
+    .lbl { font-family: Arial, Helvetica, sans-serif; font-size: 12px; fill: #444441; }
+    .link { stroke: #5F5E5A; stroke-width: 1.5; marker-end: url(#arrow); fill: none; }
+  </style>
+</defs>
+
+<rect width="680" height="560" fill="#ffffff"/>
+
+<!-- Tier 1 : navigateur -->
+<rect class="box" x="60" y="40" width="270" height="56" fill="#F1EFE8" stroke="#5F5E5A"/>
+<text class="title" x="195" y="63" fill="#444441">Vitrine publique</text>
+<text class="sub" x="195" y="81" fill="#5F5E5A">HTML/CSS statique</text>
+
+<rect class="box" x="350" y="40" width="270" height="56" fill="#F1EFE8" stroke="#5F5E5A"/>
+<text class="title" x="485" y="63" fill="#444441">Application React</text>
+<text class="sub" x="485" y="81" fill="#5F5E5A">SPA — frontend/src</text>
+
+<line class="link" x1="340" y1="96" x2="340" y2="136"/>
+
+<!-- Tier 2 : frontend modules -->
+<rect class="box" x="40" y="140" width="186" height="56" fill="#E6F1FB" stroke="#185FA5"/>
+<text class="title" x="133" y="163" fill="#0C447C">Routes &amp; layout</text>
+<text class="sub" x="133" y="181" fill="#185FA5">guards de route</text>
+
+<rect class="box" x="247" y="140" width="186" height="56" fill="#E6F1FB" stroke="#185FA5"/>
+<text class="title" x="340" y="163" fill="#0C447C">features/*</text>
+<text class="sub" x="340" y="181" fill="#185FA5">pages + hooks API</text>
+
+<rect class="box" x="454" y="140" width="186" height="56" fill="#E6F1FB" stroke="#185FA5"/>
+<text class="title" x="547" y="163" fill="#0C447C">lib/api/client.ts</text>
+<text class="sub" x="547" y="181" fill="#185FA5">token + langue</text>
+
+<line class="link" x1="340" y1="196" x2="340" y2="256"/>
+<text class="lbl" x="352" y="230">HTTP/JSON +</text>
+<text class="lbl" x="352" y="244">token Bearer</text>
+
+<!-- Tier 3 : entrée backend -->
+<rect class="box" x="40" y="260" width="290" height="56" fill="#E1F5EE" stroke="#0F6E56"/>
+<text class="title" x="185" y="283" fill="#085041">Middleware</text>
+<text class="sub" x="185" y="301" fill="#0F6E56">auth, role, locale</text>
+
+<rect class="box" x="350" y="260" width="290" height="56" fill="#E1F5EE" stroke="#0F6E56"/>
+<text class="title" x="495" y="283" fill="#085041">Controllers</text>
+<text class="sub" x="495" y="301" fill="#0F6E56">Http/Controllers/*</text>
+
+<line class="link" x1="340" y1="316" x2="340" y2="356"/>
+
+<!-- Tier 4 : domaine métier -->
+<rect class="box" x="40" y="360" width="186" height="56" fill="#EEEDFE" stroke="#534AB7"/>
+<text class="title" x="133" y="383" fill="#3C3489">Models</text>
+<text class="sub" x="133" y="401" fill="#534AB7">Eloquent + Enums</text>
+
+<rect class="box" x="247" y="360" width="186" height="56" fill="#EEEDFE" stroke="#534AB7"/>
+<text class="title" x="340" y="383" fill="#3C3489">Services</text>
+<text class="sub" x="340" y="401" fill="#534AB7">logique métier</text>
+
+<rect class="box" x="454" y="360" width="186" height="56" fill="#EEEDFE" stroke="#534AB7"/>
+<text class="title" x="547" y="383" fill="#3C3489">Resources</text>
+<text class="sub" x="547" y="401" fill="#534AB7">formatage JSON</text>
+
+<line class="link" x1="340" y1="416" x2="340" y2="456"/>
+<text class="lbl" x="352" y="442">Eloquent (SQL)</text>
+
+<!-- Tier 5 : base de données -->
+<rect class="box" x="190" y="460" width="300" height="56" fill="#FAECE7" stroke="#993C1D"/>
+<text class="title" x="340" y="483" fill="#712B13">MySQL</text>
+<text class="sub" x="340" y="501" fill="#993C1D">26 tables</text>
+
+</svg>

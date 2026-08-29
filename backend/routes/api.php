@@ -38,8 +38,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/utilisateurs', [UtilisateurController::class, 'index']);
-
     Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::get('/equipements/localisations', [EquipementController::class, 'localisations']);
     Route::get('/equipements', [EquipementController::class, 'index']);
@@ -93,6 +91,10 @@ Route::post('/demandes-changement-etat/{demande}/rejeter', [DemandeChangementEta
 });
 
     Route::middleware('role:SUPER_ADMIN,ADMIN,TECHNICIEN')->group(function () {
+        // Un Employé n'a aucun usage légitime de la liste des utilisateurs ;
+        // Admin/Technicien en ont besoin pour les dropdowns "Affecter"/"Assigner"
+        // (déjà scopés par site dans UtilisateurController::index).
+        Route::get('/utilisateurs', [UtilisateurController::class, 'index']);
         Route::put('/equipements/{equipement}', [EquipementController::class, 'update']);
         Route::get('/demandes-changement-etat', [DemandeChangementEtatController::class, 'index']);
         Route::get('/demandes-changement-etat/{demande}/commentaires', [DemandeChangementEtatController::class, 'commentaires']);

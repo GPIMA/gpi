@@ -1,0 +1,49 @@
+flowchart TB
+    subgraph CLIENT["Navigateur"]
+        VITRINE["Vitrine publique (statique)\npublic/vitrine/*.html + style.css\nindépendante de l'app React"]
+        REACT["Application GPI (SPA React)"]
+    end
+
+    subgraph FRONT["FRONTEND — React + TypeScript + Vite (frontend/src)"]
+        ENTRY["main.tsx / App.tsx\nroutes + lazy loading"]
+        APPCORE["app/\nAppShell, RequireAuth,\nRequireRole, navigation.ts"]
+        FEATURES["features/*\n1 dossier par domaine :\nequipements, incidents, alertes,\npredictions, assistant, regles,\nadministration, demandesChangementEtat\n(api.ts = hooks React Query + Page.tsx)"]
+        COMPONENTS["components/\nModal, StatusPill, PageHeader,\nNotificationsBell, ConfirmDialog..."]
+        LIB["lib/\napi/client.ts (axios + token + X-Locale)\napi/types.ts, api/enums.ts, i18n/"]
+    end
+
+    subgraph API["BACKEND — Laravel API (backend/routes/api.php)"]
+        MW["Middleware\nauth:sanctum · role:XXX · SetLocale"]
+        CTRL["Http/Controllers\nEquipementController, IncidentController,\nDemandeChangementEtatController..."]
+    end
+
+    subgraph DOMAIN["Domaine métier (backend/app)"]
+        REQ["Http/Requests\nvalidation entrante"]
+        RES["Http/Resources\nformatage JSON sortant\n(= la « Vue » du MVC)"]
+        SVC["Services\nHistoriqueService, NotificationService,\nSupervisionService, PredictionService,\nChatbotService + drivers"]
+        MODELS["Models (Eloquent)\nEquipement, Incident, User, Alerte,\nDemandeChangementEtat, Historique..."]
+        ENUMS["Enums (+ HasOptions)\nRoleUtilisateur, EtatEquipement,\nStatutIncident, TypeEquipement..."]
+    end
+
+    DB[("MySQL — 26 tables\nusers, equipements, incidents,\nhistoriques, demandes_changement_etat...")]
+
+    REACT --> ENTRY --> APPCORE --> FEATURES
+    FEATURES --> COMPONENTS
+    FEATURES --> LIB
+    LIB -- "HTTP/JSON\nBearer token + X-Locale" --> MW
+    MW --> CTRL
+    CTRL --> REQ
+    CTRL --> SVC
+    CTRL --> MODELS
+    CTRL --> RES
+    SVC --> MODELS
+    SVC -.notifie/trace.-> MODELS
+    MODELS --> ENUMS
+    MODELS <--> DB
+    RES -. "JSON (labels traduits)" .-> LIB
+
+    style CLIENT fill:#eef6fb,stroke:#65aedc
+    style FRONT fill:#f3fbff,stroke:#073b67
+    style API fill:#fff7e6,stroke:#c98511
+    style DOMAIN fill:#f0f7f2,stroke:#2f9f73
+    style DB fill:#fdeeee,stroke:#d84b3f

@@ -48,7 +48,14 @@ export default function App() {
             <Route path="predictions" element={<PredictionsPage />} />
             <Route path="assistant" element={<AssistantPage />} />
             <Route path="regles" element={<ReglesPage />} />
-            <Route path="administration" element={<AdministrationPage />} />
+            <Route
+              path="administration"
+              element={
+                <RequireRole roles={['SUPER_ADMIN', 'ADMIN']}>
+                  <AdministrationPage />
+                </RequireRole>
+              }
+            />
             <Route
               path="demandes-inscription"
               element={

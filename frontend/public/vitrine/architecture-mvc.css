@@ -103,7 +103,7 @@
 .mvc-response p { grid-column: 1 / -1; margin: 0; color: var(--mvc-muted); font-size: .85rem; }
 
 .mvc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
-.mvc-card { padding: 1.45rem; border: 1px solid var(--mvc-line); border-radius: 20px; background: #fff; box-shadow: 0 10px 22px rgba(7,59,103,.06); }
+.mvc-card { padding: 1.45rem; border: 1px solid var(--mvc-line); border-radius: 20px; background: #fff; box-shadow: 0 10px 22px rgba(7, 59, 103,.06); }
 .mvc-card__top { display: flex; align-items: center; gap: .65rem; color: var(--mvc-muted); font-size: .78rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .mvc-badge { display:grid; place-items:center; width: 2rem; height: 2rem; border-radius: 8px; font-size: .92rem; font-weight: 900; }
 .mvc-card h3 { margin: 1rem 0 .55rem; color: var(--mvc-navy); font-size: 1.2rem; }
